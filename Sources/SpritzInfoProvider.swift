@@ -6,12 +6,12 @@
 
 import Foundation
 
-public enum Sex {
+public enum Sex: String {
   case male
   case female
 }
 
-public protocol CFInfoProvider {
+public protocol SpritzInfoProvider {
   
   /// The first name of the person.
   var firstName: String { get set }
@@ -23,5 +23,9 @@ public protocol CFInfoProvider {
   var dateOfBirth: Date { get set }
   
   /// The sex of the user.
-  var ser: Sex { get set }
+  var sex: Sex { get set }
+  
+  /// The italian province where the user was born.
+  /// Should use full name. Do not use abreviation, or any sort of representation.
+  var province: String { get set }
 }
