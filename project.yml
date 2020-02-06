@@ -1,0 +1,41 @@
+
+name: Spritz
+
+options:
+  minimumXcodeGenVersion: "2.5.0"
+  bundleIdPrefix: com.theInkedEngineer
+  indentWidth: 2
+  xcodeVersion: 10.2.1
+  deploymentTarget:
+    iOS: "10.0"
+  generateEmptyDirectories: true
+  
+targets:
+  Spritz:
+    type: framework
+    platform: iOS
+    attributes:
+      ProvisioningStyle: Automatic
+    sources: [Sources]
+    info:
+      path: Resources/Info.plist
+
+  SpritzTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [Tests]
+    dependencies:
+      - target: Spritz
+    settings:
+      INFOPLIST_FILE: Tests/Resources/Info.plist
+
+schemes:
+  Developement:
+      build:
+        targets:
+          Spritz: all
+          SpritzTests: [test]
+      test:
+        gatherCoverageData: true
+        randomExecutionOrder: false
+        targets: [SpritzTests]
