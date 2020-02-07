@@ -86,4 +86,14 @@ class SpritzValidatorTests: XCTestCase {
   func testSignificantCharafterFromFirstNameSuccessfulFromLongNameWith0ConsonantAndSuperShort() {
     XCTAssertEqual(Spritz.significantLastNameCharacters(from: "A"), "AXX")
   }
+  
+  func testSignificantBirthDateAndSexCharactersSuccessfull() {
+    // timeInterval 699575077 = 2 marzo 1992
+    let letters1 = Spritz.significantBirthDateAndSexCharacters(sex: .male, birthdate: Date(timeIntervalSince1970: 699575077))
+    XCTAssertEqual(letters1, "92C02")
+    
+    // timeinterval 880151077 = 21 novembre 1997
+    let letters2 = Spritz.significantBirthDateAndSexCharacters(sex: .female, birthdate: Date(timeIntervalSince1970: 880151077))
+    XCTAssertEqual(letters2, "97K61")
+  }
 }
