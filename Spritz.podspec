@@ -15,4 +15,9 @@ Pod::Spec.new do |s|
       'Sources/*.swift'
     ]
   
+    s.resource_bundles = {
+      'Spritz' => [
+        'Resources/*.csv'
+      ]
+    }
   end
