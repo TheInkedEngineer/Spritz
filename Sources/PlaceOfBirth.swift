@@ -8,7 +8,6 @@ import Foundation
 
 /// A `typealias` for a statistical code used to represent a country or an italian municipality.
 public typealias CodiceStatistico = String
-
 /// The italian postal code.
 public typealias CAP = String
 
@@ -19,5 +18,4 @@ struct PlaceOfBirth: Hashable {
   let code: CodiceStatistico
   /// The name of the municipality.
   let name: String
-  var dioCan: String = "AH"
 }

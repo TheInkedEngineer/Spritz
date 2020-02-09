@@ -11,12 +11,12 @@ import XCTest
 
 class SpritzParserTests: XCTestCase {
   func testParsingItalianPlaceOfBirth() {
-    let places = Spritz.italianPlaceOfBirth
+    let places = Spritz.italianPlacesOfBirth
     XCTAssertEqual(places.count, 8229)
   }
   
   func testParsingForeignPlaceOfBirth() {
-    let places = Spritz.foreignPlaceOfBirth
+    let places = Spritz.foreignPlacesOfBirth
     XCTAssertEqual(places.count, 248)
   }
 }

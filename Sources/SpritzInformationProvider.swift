@@ -6,12 +6,14 @@
 
 import Foundation
 
+/// The sex of the person.
 public enum Sex: String {
   case male
   case female
 }
 
-public protocol SpritzInfoProvider {
+/// A protocol used by `Spritz` to generate and validate the `Codice Fiscale`.
+public protocol SpritzInformationProvider {
   /// The first name of the person.
   var firstName: String { get set }
   /// The last name of the person.
