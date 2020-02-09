@@ -21,10 +21,11 @@ public class Spritz {
   
   // MARK: - Public Methods
   
+  /// Generates the `Codice Fiscale` from the given information.
   public static func generateCF(from info: SpritzInformationProvider) throws -> String {
     let lastNameRepresentation = try Spritz.Transformer.lastName(from: info.lastName)
     let firstNameRepresentation = try Spritz.Transformer.firstName(from: info.firstName)
-    let dateAndSexRepresentation = Spritz.Transformer.birthDateAndSex(sex: info.sex, birthdate: info.dateOfBirth)
+    let dateAndSexRepresentation = try Spritz.Transformer.birthDateAndSex(sex: info.sex, birthdate: info.dateOfBirth)
     let placeOfBirthRepresentation = try Spritz.Transformer.placeOfBirth(info.placeOfBirth)
     let firstFifteenLetters = lastNameRepresentation + firstNameRepresentation + dateAndSexRepresentation + placeOfBirthRepresentation
     let controlCharacter = Spritz.Transformer.controlCharacter(for: firstFifteenLetters)
@@ -32,12 +33,71 @@ public class Spritz {
     return firstFifteenLetters + controlCharacter
   }
   
-  public static func isValid(_ codiceFiscale: String, for info: SpritzInformationProvider) -> Bool {
-    guard codiceFiscale.count == 16 else {
-      return false
+  
+  /// Validates a `Codice Fiscale` checking only for the passed fields.
+  /// - Parameters:
+  ///   - codiceFiscale: The `Codice Fiscale` to control.
+  ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
+  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Bool {
+    let array = codiceFiscale.uppercased().map{String($0)}
+    guard array.count == 16 else { return false }
+    
+    if fields.contains(.lastName) {
+      let lastNameAreLetters = array[0...2].filter { Character($0).isLetter }.count == 3
+      guard lastNameAreLetters else { return false }
     }
     
+    if fields.contains(.firstName) {
+      let firstNameAreLetters = array[3...5].filter { Character($0).isLetter }.count == 3
+      guard firstNameAreLetters else { return false }
+    }
+    
+    if fields.contains([.dateOfBirth, .sex]) {
+      let yearOfBirthIsInt = array[6...7].filter { Int($0) != nil }.count == 2
+      guard yearOfBirthIsInt else { return false }
+      
+      
+      let monthOfBirth = Spritz.Transformer.MonthRepresentation(stringValue: array[8])
+      guard let month = monthOfBirth else { return false}
+      
+      guard
+        let day = Int(array[9...10].reduce(""){ $0 + $1 }),
+        day > 0 && day < 72,
+        (day <= month.maxDaysPerMonth || (day > 40 && day <= month.maxDaysPerMonth + 30))
+        else {
+          return false
+      }
+    }
+    
+    if fields.contains(.placeOfBirth) {
+      let placeOfBirth = array[11] != "Z" ?
+        Spritz.italianPlacesOfBirth.first { $0.code == array[11...14].reduce("") { $0 + $1 }} :
+        Spritz.foreignPlacesOfBirth.first { $0.code == array[11...14].reduce("") { $0 + $1 }}
+      guard placeOfBirth != nil else { return false }
+    }
+    
+    guard Spritz.Transformer.controlCharacter(for: array[0...14].reduce("") { $0 + $1 }) == array[15] else { return false }
+    
     return true
+  }
+  
+  /// Returns a `Result<Bool, Spritz.ParsingError>` based on a passed `Codice Fiscale` and information.
+  public static func isValid(_ codiceFiscale: String, for info: SpritzInformationProvider) -> Result<Bool, Spritz.ParsingError> {
+    guard codiceFiscale.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
+    
+    do {
+      let generatedCF = try Spritz.generateCF(from: info)
+      guard generatedCF == codiceFiscale.uppercased() else { return .failure(.corruptedData("The CF is valid, but does not belong to this user.")) }
+      return .success(true)
+    } catch let error {
+      guard let error = error as? Spritz.ParsingError else {
+        fatalError("Unexpected error.")
+      }
+      switch error {
+      case .fileNotFound: fatalError("could not locate the countries file.")
+      case .corruptedData(let message): return .failure(.corruptedData(message))
+      }
+    }
   }
 }
 

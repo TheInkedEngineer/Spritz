@@ -57,7 +57,7 @@ internal extension Spritz.Transformer {
   }
   
   /// Generates the CF representation of a given sex and birth date.
-  static func birthDateAndSex(sex: Sex, birthdate: Date) -> String {
+  static func birthDateAndSex(sex: Sex, birthdate: Date) throws -> String {
     let monthAndDayComponents = Calendar(identifier: .gregorian).dateComponents([.day, .month, .year], from: birthdate)
     
     guard
@@ -67,7 +67,11 @@ internal extension Spritz.Transformer {
       let month      = MonthRepresentation(rawValue: monthAsInt)
       
       else {
-        fatalError("Could not parse date")
+        throw Spritz.ParsingError.corruptedData("Could not parse date")
+    }
+    
+    if month == .B, !Spritz.Transformer.isLeapYear(yearAsInt), dayAsInt > 28 {
+      throw Spritz.ParsingError.corruptedData("Invalid date. February has only 28 days in a non-leap year.")
     }
     
     var day: String {
@@ -163,6 +167,11 @@ internal extension Spritz.Transformer {
     case .zero             : return vowels[0...2].reduce("") { $0 + $1 }
     }
   }
+  
+  /// Checks if a given passed year is Leap of not.
+  static func isLeapYear(_ year: Int) -> Bool {
+    ((year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0))
+  }
 }
 
 // MARK: - Enums
@@ -174,12 +183,37 @@ internal extension Spritz.Transformer {
   }
   
   /// The letter equivalent of each month.
-  enum MonthRepresentation: Int {
+  enum MonthRepresentation: Int, CaseIterable {
     case A = 1, B, C, D, E, F, G, H, I, J, K, L
+    
+    init?(stringValue: String) {
+      let found = MonthRepresentation.allCases.first { $0.asString == stringValue.uppercased()}
+      guard let month = found  else {
+        return nil
+      }
+      self = month
+    }
     
     /// Returns the case value as a `String`.
     var asString: String {
       String(describing: self.self)
+    }
+    
+    var maxDaysPerMonth: Int {
+      switch self {
+      case .A: return 31
+      case .B: return 29 // we assum it is 29, because there is no way to know if the year is leap or not from the two digits alone.
+      case .C: return 31
+      case .D: return 30
+      case .E: return 31
+      case .F: return 30
+      case .G: return 31
+      case .H: return 31
+      case .I: return 30
+      case .J: return 31
+      case .K: return 30
+      case .L: return 31
+      }
     }
   }
   

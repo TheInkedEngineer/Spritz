@@ -27,3 +27,18 @@ public protocol SpritzInformationProvider {
   /// Refer to `italianPlaceOfBirth.csv` for the proper names as per italian bureaucracy.
   var placeOfBirth: String { get set }
 }
+
+public struct CodiceFiscaleFields: OptionSet {
+  public let rawValue: Int
+  
+  public init(rawValue: Int) { self.rawValue = rawValue }
+  
+  public static let firstName = CodiceFiscaleFields(rawValue: 1 << 0)
+  public static let lastName = CodiceFiscaleFields(rawValue: 1 << 1)
+  public static let dateOfBirth = CodiceFiscaleFields(rawValue: 1 << 2)
+  public static let sex = CodiceFiscaleFields(rawValue: 1 << 3)
+  public static let placeOfBirth = CodiceFiscaleFields(rawValue: 1 << 4)
+  
+  public static let all: CodiceFiscaleFields = [.firstName, .lastName, .dateOfBirth, .sex, .placeOfBirth]
+
+}

@@ -105,4 +105,12 @@ class SpritzValidatorTests: XCTestCase {
     XCTAssertEqual(Spritz.Transformer.controlCharacter(for: "RSSBBR69C48F839"), "A")
     XCTAssertEqual(Spritz.Transformer.controlCharacter(for: "SFAFRS92C02Z229"), "F")
   }
+  
+  func testIsValidCFSuccess() {
+    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F"))
+  }
+  
+  func testIsValidCFFailure() {
+    XCTAssertFalse(Spritz.isValid("SFAFRS92C02Z229N"))
+  }
 }
