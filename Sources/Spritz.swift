@@ -23,7 +23,7 @@ public class Spritz {
   
   public static func generateCF(from info: SpritzInformationProvider) throws -> String {
     let lastNameRepresentation = try Spritz.Transformer.lastName(from: info.lastName)
-    let firstNameRepresentation = try Spritz.Transformer.firstName(from: info.lastName)
+    let firstNameRepresentation = try Spritz.Transformer.firstName(from: info.firstName)
     let dateAndSexRepresentation = Spritz.Transformer.birthDateAndSex(sex: info.sex, birthdate: info.dateOfBirth)
     let placeOfBirthRepresentation = try Spritz.Transformer.placeOfBirth(info.placeOfBirth)
     let firstFifteenLetters = lastNameRepresentation + firstNameRepresentation + dateAndSexRepresentation + placeOfBirthRepresentation
