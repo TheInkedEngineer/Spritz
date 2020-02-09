@@ -38,34 +38,40 @@ public class Spritz {
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Bool {
-    let array = codiceFiscale.uppercased().map{String($0)}
-    guard array.count == 16 else { return false }
+  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Result<Bool, Spritz.ParsingError> {
+    let array = codiceFiscale.uppercased().map { String($0) }
+    guard array.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
     
     if fields.contains(.lastName) {
       let lastNameAreLetters = array[0...2].filter { Character($0).isLetter }.count == 3
-      guard lastNameAreLetters else { return false }
+      guard lastNameAreLetters else { return .failure(.corruptedData("First three elements should be letters.")) }
     }
     
     if fields.contains(.firstName) {
       let firstNameAreLetters = array[3...5].filter { Character($0).isLetter }.count == 3
-      guard firstNameAreLetters else { return false }
+      guard firstNameAreLetters else { return .failure(.corruptedData("Element 4, 5 and 6 should be letters.")) }
     }
     
     if fields.contains([.dateOfBirth, .sex]) {
-      let yearOfBirthIsInt = array[6...7].filter { Int($0) != nil }.count == 2
-      guard yearOfBirthIsInt else { return false }
+      let yearOfBirthIsInt = Int(array[6]) != nil && Int(array[7]) != nil
+      guard yearOfBirthIsInt else { return .failure(.corruptedData("Element 5 and 6 represent a year and should be numbers.")) }
       
       
       let monthOfBirth = Spritz.Transformer.MonthRepresentation(stringValue: array[8])
-      guard let month = monthOfBirth else { return false}
+      guard let month = monthOfBirth else { return .failure(.corruptedData("The month letter should be between A and L included."))}
       
       guard
         let day = Int(array[9...10].reduce(""){ $0 + $1 }),
         day > 0 && day < 72,
         (day <= month.maxDaysPerMonth || (day > 40 && day <= month.maxDaysPerMonth + 30))
         else {
-          return false
+          return .failure(
+            .corruptedData(
+              """
+              Based on the sex and month, the day is not valid. Should be between 0 and \(month.maxDaysPerMonth)" if male,
+              or between 41 and \(month.maxDaysPerMonth + 30) if female.
+              """
+            ))
       }
     }
     
@@ -73,12 +79,15 @@ public class Spritz {
       let placeOfBirth = array[11] != "Z" ?
         Spritz.italianPlacesOfBirth.first { $0.code == array[11...14].reduce("") { $0 + $1 }} :
         Spritz.foreignPlacesOfBirth.first { $0.code == array[11...14].reduce("") { $0 + $1 }}
-      guard placeOfBirth != nil else { return false }
+      guard placeOfBirth != nil else { return .failure(.corruptedData("The 4 digits representing place of birth are not valid.")) }
     }
     
-    guard Spritz.Transformer.controlCharacter(for: array[0...14].reduce("") { $0 + $1 }) == array[15] else { return false }
+    let firstFifteenLetters = array[0...14].reduce("") { $0 + $1 }
+    guard Spritz.Transformer.controlCharacter(for: firstFifteenLetters) == array[15] else {
+      return .failure(.corruptedData("\(Spritz.Transformer.controlCharacter(for: firstFifteenLetters)) but got \(array[15]) instead."))
+    }
     
-    return true
+    return .success(true)
   }
   
   /// Returns a `Result<Bool, Spritz.ParsingError>` based on a passed `Codice Fiscale` and information.
@@ -136,5 +145,96 @@ extension Spritz {
       case .corruptedData(let message): fatalError("\(message)")
       }
     }
+  }
+}
+
+// MARK: - Helpers
+
+internal extension Spritz {
+  /// Omocodia is when two or more people has the same first and last name, born on the same day, of the same year from the same sex in the same municipality.
+  /// In such dase, starting from the most right number, one digit is changed from a number to a letter based on a special table.
+  /// The control letter however remains the same. Therefore we can strip the CF from the conversions and treat it like a normal CF.
+  static func filterOmocodia(in codiceFiscale: String) throws -> String {
+    var array = codiceFiscale.uppercased().map { String($0) }
+    let possibleConvertedDigits = [array[-2], array[-3], array[-4], array[-6], array[-7], array[-9], array[-10]]
+    var digitNotFound = false
+    
+    try possibleConvertedDigits.forEach { element in
+      guard (digitNotFound || Int(element) == nil) else {
+        throw Spritz.ParsingError.corruptedData("Invalid CF.")
+      }
+      
+      if Character(element).isLetter {
+        guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: element)?.rawValue else {
+          throw Spritz.ParsingError.corruptedData(
+            "Invalid value for letter \(array[-2]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+        }
+        guard let indexOfElement = array.lastIndex(of: element) else {
+          fatalError("Something went extremely wrong.")
+        }
+        array[indexOfElement] = String(digit)
+      } else {
+        digitNotFound = true
+      }
+    }
+    
+    
+    if Character(array[-2]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-2])?.rawValue else {
+        throw Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-2]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-2] = String(digit)
+    }
+    
+    if Character(array[-3]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-3])?.rawValue else {
+        throw Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-3]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-3] = String(digit)
+    }
+    
+    if Character(array[-4]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-4])?.rawValue else {
+        throw Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-4]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-4] = String(digit)
+    }
+    
+    if Character(array[-6]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-6])?.rawValue else {
+        throw Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-6]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-6] = String(digit)
+    }
+    
+    if Character(array[-7]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-7])?.rawValue else {
+        throw Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-7]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-7] = String(digit)
+    }
+    
+    if Character(array[-9]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-9])?.rawValue else {
+        throw Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-9]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-9] = String(digit)
+    }
+    
+    if Character(array[-10]).isLetter {
+      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-10])?.rawValue else { throw
+        Spritz.ParsingError.corruptedData(
+          "Invalid value for letter \(array[-10]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+      }
+      array[-10] = String(digit)
+    }
+    
+    return array.reduce(""){ $0 + $1 }
   }
 }

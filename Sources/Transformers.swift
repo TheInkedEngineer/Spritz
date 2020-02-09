@@ -269,13 +269,19 @@ internal extension Spritz.Transformer {
   }
   
   /// Single digits from 0 to 9.
-  enum SingleDigitNumber: Int {
+  enum SingleDigitNumber: Int, CaseIterable {
     case zero, one, two, three, four, five, six, seven, eight, nine
     
-    /// The value of the digit when in an even position inside the CF.
-    var evenPositionValue: Int {
-      rawValue
+    init?(omocodiaValue: String) {
+      let found = SingleDigitNumber.allCases.first { $0.equivalentForOmocodia == omocodiaValue.uppercased()}
+      guard let digit = found  else {
+        return nil
+      }
+      self = digit
     }
+    
+    /// The value of the digit when in an even position inside the CF.
+    var evenPositionValue: Int { rawValue }
     
     /// The value of the digit when in an odd position inside the CF.
     var oddPositionValue: Int {
@@ -290,6 +296,22 @@ internal extension Spritz.Transformer {
       case .seven: return 17
       case .eight: return 19
       case .nine : return 21
+      }
+    }
+    
+    /// The value of the ineger as a letter when substituted to overcome `Omocodia`.
+    var equivalentForOmocodia: String {
+      switch self {
+      case .zero : return "L"
+      case .one  : return "M"
+      case .two  : return "N"
+      case .three: return "P"
+      case .four : return "Q"
+      case .five : return "R"
+      case .six  : return "S"
+      case .seven: return "T"
+      case .eight: return "U"
+      case .nine : return "V"
       }
     }
   }

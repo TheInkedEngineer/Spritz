@@ -89,11 +89,11 @@ class SpritzValidatorTests: XCTestCase {
   
   func testSignificantBirthDateAndSexCharactersSuccessfull() {
     // timeInterval 699575077 = 2 marzo 1992
-    let letters1 = Spritz.Transformer.birthDateAndSex(sex: .male, birthdate: Date(timeIntervalSince1970: 699575077))
+    let letters1 = try! Spritz.Transformer.birthDateAndSex(sex: .male, birthdate: Date(timeIntervalSince1970: 699575077))
     XCTAssertEqual(letters1, "92C02")
     
     // timeinterval 880151077 = 21 novembre 1997
-    let letters2 = Spritz.Transformer.birthDateAndSex(sex: .female, birthdate: Date(timeIntervalSince1970: 880151077))
+    let letters2 = try! Spritz.Transformer.birthDateAndSex(sex: .female, birthdate: Date(timeIntervalSince1970: 880151077))
     XCTAssertEqual(letters2, "97K61")
   }
   
@@ -104,6 +104,7 @@ class SpritzValidatorTests: XCTestCase {
   func testControlLetterGenerator() {
     XCTAssertEqual(Spritz.Transformer.controlCharacter(for: "RSSBBR69C48F839"), "A")
     XCTAssertEqual(Spritz.Transformer.controlCharacter(for: "SFAFRS92C02Z229"), "F")
+    XCTAssertEqual(Spritz.Transformer.controlCharacter(for: "SFAFRS92C02Z22V"), "U")
   }
   
   func testIsValidCFSuccess() {

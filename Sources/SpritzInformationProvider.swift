@@ -40,5 +40,4 @@ public struct CodiceFiscaleFields: OptionSet {
   public static let placeOfBirth = CodiceFiscaleFields(rawValue: 1 << 4)
   
   public static let all: CodiceFiscaleFields = [.firstName, .lastName, .dateOfBirth, .sex, .placeOfBirth]
-
 }
