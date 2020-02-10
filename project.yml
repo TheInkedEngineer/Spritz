@@ -18,7 +18,7 @@ targets:
       ProvisioningStyle: Automatic
     sources: [Sources]
     info:
-      path: Resources/Info.plist
+      path: Sources/Resources/Info.plist
 
   SpritzTests:
     type: bundle.unit-test

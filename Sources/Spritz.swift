@@ -61,7 +61,7 @@ public class Spritz {
       guard let month = monthOfBirth else { return .failure(.corruptedData("The month letter should be between A and L included."))}
       
       guard
-        let day = Int(array[9...10].reduce(""){ $0 + $1 }),
+        let day = Int(array[9...10].reduce("") { $0 + $1 }),
         day > 0 && day < 72,
         (day <= month.maxDaysPerMonth || (day > 40 && day <= month.maxDaysPerMonth + 30))
         else {
@@ -106,13 +106,14 @@ public class Spritz {
         fatalError("Unexpected error.")
       }
       switch error {
-      case .fileNotFound: fatalError("could not locate the countries file.")
+      case .fileNotFound: return .failure(.fileNotFound)
       case .corruptedData(let message): return .failure(.corruptedData(message))
       }
     }
   }
   
-  /// Checks if the passed `Codice FIscale` is properly structured regardless of info. This is a very high level check and should not be used unless necessary for lack of data.
+  /// Checks if the passed `Codice FIscale` is properly structured regardless of info.
+  /// This is a very high level check and should not be used unless necessary for lack of data.
   public static func isProperlyStructured(_ codiceFiscale: String) -> Bool {
     let pattern = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
     let filteredCF = try? filterOmocodia(in: codiceFiscale)
@@ -164,7 +165,8 @@ extension Spritz {
 // MARK: - Helpers
 
 internal extension Spritz {
-  /// Omocodia is when two or more people has the same first and last name, born on the same day, of the same year from the same sex in the same municipality.
+  /// Omocodia is when two or more people has the same first and last name,
+  /// born on the same day, of the same year from the same sex in the same municipality.
   /// In such dase, starting from the most right number, one digit is changed from a number to a letter based on a special table.
   /// The control letter however remains the same. Therefore we can strip the CF from the conversions and treat it like a normal CF.
   static func filterOmocodia(in codiceFiscale: String) throws -> String {
@@ -179,7 +181,7 @@ internal extension Spritz {
       if Character(element).isLetter {
         guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: element)?.rawValue else {
           throw Spritz.ParsingError.corruptedData(
-            "Invalid value for letter \(array[-2]). It is not equivalent to any digit. Make sure to insert a valid CF.")
+            "Invalid value for letter \(element). It is not equivalent to any digit. Make sure to insert a valid CF.")
         }
         guard let indexOfElement = array.lastIndex(of: element) else {
           fatalError("Something went extremely wrong.")

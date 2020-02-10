@@ -35,19 +35,19 @@ class SpritzTests: XCTestCase {
   }
   
   func testIsValidForFirstAndLastName() {
-    let result = try? Spritz.isValid("SFAFRSZZZZZZZZZE", inlcude: [.firstName, .lastName]).get()
+    let result = try? Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.firstName, .lastName]).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
   
   func testIsValidForDateOfBirthAndSex() {
-    let result = try? Spritz.isValid("ZZZZZZ92C02ZZZZN", inlcude: [.dateOfBirth, .sex]).get()
+    let result = try? Spritz.isValid("ZZZZZZ92C02Z229W", inlcude: [.dateOfBirth, .sex]).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
   
   func testIsValidForPlaceOFBirth() {
-    let result = try? Spritz.isValid("ZZZZZZZZZZZZ229E", inlcude: [.firstName, .lastName]).get()
+    let result = try? Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.placeOfBirth]).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
