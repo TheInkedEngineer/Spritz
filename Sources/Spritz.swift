@@ -109,8 +109,14 @@ public class Spritz {
     }
   }
   
-  public static func isProperlyStructured(_ codiceFiscale: String) {
-    let regex = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
+  
+  /// Checks if the passed `Codice FIscale` is properly structured regardless of info. This is a very high level check and should not be used unless necessary.
+  public static func isProperlyStructured(_ codiceFiscale: String) -> Bool {
+    let codiceFiscale = try! filterOmocodia(in: codiceFiscale)
+    let pattern = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
+    let range = NSRange(location: 0, length: codiceFiscale.utf16.count)
+    let regex = try? NSRegularExpression(pattern: pattern)
+    return regex != nil
   }
 }
 
@@ -160,14 +166,13 @@ internal extension Spritz {
   /// The control letter however remains the same. Therefore we can strip the CF from the conversions and treat it like a normal CF.
   static func filterOmocodia(in codiceFiscale: String) throws -> String {
     var array = codiceFiscale.uppercased().map { String($0) }
-    let possibleConvertedDigits = [array[-2], array[-3], array[-4], array[-6], array[-7], array[-9], array[-10]]
-    var digitNotFound = false
+    let possibleConvertedDigits = [array[14], array[13], array[12], array[10], array[9], array[7], array[6]]
+    var foundDigit = false
     
     try possibleConvertedDigits.forEach { element in
-      guard (digitNotFound || Int(element) == nil) else {
-        throw Spritz.ParsingError.corruptedData("Invalid CF.")
-      }
-      
+      // numbers are to be changed from the most right to most left, not randomly.
+      if foundDigit && Int(element) == nil { throw Spritz.ParsingError.corruptedData("Invalid CF.") }
+    
       if Character(element).isLetter {
         guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: element)?.rawValue else {
           throw Spritz.ParsingError.corruptedData(
@@ -178,67 +183,9 @@ internal extension Spritz {
         }
         array[indexOfElement] = String(digit)
       } else {
-        digitNotFound = true
+        foundDigit = true
       }
     }
-    
-    
-    if Character(array[-2]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-2])?.rawValue else {
-        throw Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-2]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-2] = String(digit)
-    }
-    
-    if Character(array[-3]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-3])?.rawValue else {
-        throw Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-3]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-3] = String(digit)
-    }
-    
-    if Character(array[-4]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-4])?.rawValue else {
-        throw Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-4]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-4] = String(digit)
-    }
-    
-    if Character(array[-6]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-6])?.rawValue else {
-        throw Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-6]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-6] = String(digit)
-    }
-    
-    if Character(array[-7]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-7])?.rawValue else {
-        throw Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-7]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-7] = String(digit)
-    }
-    
-    if Character(array[-9]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-9])?.rawValue else {
-        throw Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-9]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-9] = String(digit)
-    }
-    
-    if Character(array[-10]).isLetter {
-      guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: array[-10])?.rawValue else { throw
-        Spritz.ParsingError.corruptedData(
-          "Invalid value for letter \(array[-10]). It is not equivalent to any digit. Make sure to insert a valid CF.")
-      }
-      array[-10] = String(digit)
-    }
-    
     return array.reduce(""){ $0 + $1 }
   }
 }

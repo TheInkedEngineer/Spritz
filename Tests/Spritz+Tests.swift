@@ -67,4 +67,22 @@ class SpritzTests: XCTestCase {
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
+  
+  func testFilterOmocodia() {
+    let filtered = try? Spritz.filterOmocodia(in: "SFAFRS92C02Z22VF")
+    XCTAssertEqual(filtered, "SFAFRS92C02Z229F")
+    
+    let filtered2 = try? Spritz.filterOmocodia(in: "SFAFRS92C02Z2NVF")
+    XCTAssertEqual(filtered2, "SFAFRS92C02Z229F")
+    
+    do {
+      _ = try Spritz.filterOmocodia(in: "SFAFRS92C02ZN2VF")
+    } catch let error {
+      guard case Spritz.ParsingError.corruptedData("Invalid CF.") = error else {
+        XCTFail()
+        return
+      }
+      XCTAssertTrue(true)
+    }
+  }
 }
