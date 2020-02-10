@@ -8,8 +8,6 @@ import Foundation
 
 /// A `typealias` for a statistical code used to represent a country or an italian municipality.
 public typealias CodiceStatistico = String
-/// The italian postal code.
-public typealias CAP = String
 
 /// A single italian municipality. There are over 7000 of them all over italy.
 /// Each one has a unique code, that code is used in the `Codice Fiscale`.
