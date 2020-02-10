@@ -11,13 +11,9 @@ Pod::Spec.new do |s|
   
     s.ios.deployment_target = '10.0'
     
-    s.ios.source_files = [
-      'Sources/*.swift'
-    ]
+    s.ios.source_files = ['Sources/*.swift']
   
     s.resource_bundles = {
-      'Spritz' => [
-        'Sources/Resources/*.csv'
-      ]
+      'Spritz' => ['Sources/Resources/*.csv']
     }
-  end
+end

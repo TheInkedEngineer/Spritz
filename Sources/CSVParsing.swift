@@ -26,7 +26,7 @@ extension Spritz {
   internal static func parseCSV(for country: Country) throws -> [PlaceOfBirth] {
     let fileName = country == .italy ? "comuni" : "stati"
     
-    guard let filepath = Spritz.bundle.path(forResource: fileName, ofType: "csv") else {
+    guard let filepath = Spritz.bundle?.path(forResource: fileName, ofType: "csv") else {
       throw Spritz.ParsingError.fileNotFound
     }
     

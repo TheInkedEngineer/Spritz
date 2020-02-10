@@ -131,7 +131,14 @@ extension Spritz {
   internal static let italianVowels = "AEIOU"
   
   /// The `Spritz` bundle.
-  internal static let bundle = Bundle(for: Spritz.self)
+  internal static var bundle: Bundle? {
+    let mainBundle = Bundle(for: Spritz.self)
+    guard let path = mainBundle.path(forResource: "Spritz", ofType: "bundle") else {
+      return nil
+    }
+    let spritzBundle = Bundle(path: path)
+    return spritzBundle
+  }
   
   /// The object containing all municipalities with their respective data.
   internal static var italianPlacesOfBirth: [PlaceOfBirth] {
