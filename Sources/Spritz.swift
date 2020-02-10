@@ -33,13 +33,13 @@ public class Spritz {
     return firstFifteenLetters + controlCharacter
   }
   
-  
   /// Validates a `Codice Fiscale` checking only for the passed fields.
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Result<Bool, Spritz.ParsingError> {
-    let array = codiceFiscale.uppercased().map { String($0) }
+  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) throws -> Result<Bool, Spritz.ParsingError> {
+    let filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
+    let array = filteredFromOmocodia.uppercased().map { String($0) }
     guard array.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
     
     if fields.contains(.lastName) {
@@ -95,8 +95,11 @@ public class Spritz {
     guard codiceFiscale.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
     
     do {
+      let filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
       let generatedCF = try Spritz.generateCF(from: info)
-      guard generatedCF == codiceFiscale.uppercased() else { return .failure(.corruptedData("The CF is valid, but does not belong to this user.")) }
+      guard generatedCF == filteredFromOmocodia.uppercased() else {
+        return .failure(.corruptedData("The CF is valid, but does not belong to this user."))
+      }
       return .success(true)
     } catch let error {
       guard let error = error as? Spritz.ParsingError else {
@@ -109,14 +112,14 @@ public class Spritz {
     }
   }
   
-  
-  /// Checks if the passed `Codice FIscale` is properly structured regardless of info. This is a very high level check and should not be used unless necessary.
+  /// Checks if the passed `Codice FIscale` is properly structured regardless of info. This is a very high level check and should not be used unless necessary for lack of data.
   public static func isProperlyStructured(_ codiceFiscale: String) -> Bool {
-    let codiceFiscale = try! filterOmocodia(in: codiceFiscale)
     let pattern = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
+    let filteredCF = try? filterOmocodia(in: codiceFiscale)
+    let codiceFiscale = filteredCF ?? ""
     let range = NSRange(location: 0, length: codiceFiscale.utf16.count)
     let regex = try? NSRegularExpression(pattern: pattern)
-    return regex != nil
+    return regex?.firstMatch(in: codiceFiscale, options: [], range: range) != nil
   }
 }
 

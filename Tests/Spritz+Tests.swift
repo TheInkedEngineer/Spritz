@@ -85,4 +85,11 @@ class SpritzTests: XCTestCase {
       XCTAssertTrue(true)
     }
   }
+  
+  func testShallowIsProperlyConfigured() {
+    XCTAssertTrue(Spritz.isProperlyStructured("SFAFRS92C02Z229F"))
+    XCTAssertTrue(Spritz.isProperlyStructured("SFAFRS92C02Z22VF"))
+    XCTAssertFalse(Spritz.isProperlyStructured("SFAFRS92C02ZN2VF"))
+    XCTAssertFalse(Spritz.isProperlyStructured("S2AFRS92C02Z22VF"))
+  }
 }
