@@ -3,6 +3,10 @@
 </p>
 
 [![Twitter](https://img.shields.io/twitter/url/https/theinkedgineer.svg?label=TheInkedgineer&style=social)](https://twitter.com/theinkedgineer)
+![Documentation](https://theinkedengineer.github.io/Spritz/docs/1.0.x/badge.svg)
+![PodVersion](https://img.shields.io/cocoapods/v/Spritz.svg)
+![SwiftLang badge](https://img.shields.io/badge/language-Swift%205.1-orange.svg)
+![Platform](https://img.shields.io/cocoapods/p/Spritz.svg)
 
 # Spritz
 

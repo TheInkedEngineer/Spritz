@@ -1,0 +1,10 @@
+author: Firas Safa a.k.a. The Inked Engineer
+author_url: https://theinkedengineer.com
+copyright: TheInkedEngineer
+readme: README.md
+module: Spritz
+github_url: https://github.com/TheInkedEngineer/
+github_file_prefix: https://github.com/TheInkedEngineer/blob/master
+module_version: 1.0.0
+xcodebuild_arguments: [clean,build,-scheme,BloodyMary]
+output: docs/1.0.x/

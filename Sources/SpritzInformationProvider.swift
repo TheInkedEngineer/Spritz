@@ -8,7 +8,9 @@ import Foundation
 
 /// The sex of the person.
 public enum Sex: String {
+  /// A legally male person.
   case male
+  /// A legally female person.
   case female
 }
 
@@ -46,6 +48,6 @@ public struct CodiceFiscaleFields: OptionSet {
   /// Should use full name. Do not use abreviation, or any sort of representation.
   /// Refer to `comuni.csv` or `stati.csv` for the proper names as per italian bureaucracy.
   public static let placeOfBirth = CodiceFiscaleFields(rawValue: 1 << 4)
-  
+  /// A list containing all the possibile options.
   public static let all: CodiceFiscaleFields = [.firstName, .lastName, .dateOfBirth, .sex, .placeOfBirth]
 }

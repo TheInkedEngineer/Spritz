@@ -9,7 +9,9 @@ import Foundation
 extension Spritz {
   /// List of possible decoding errors.
   public enum ParsingError: Error {
+    /// The `csv` file was not found.
     case fileNotFound
+    /// A data being parsed is corrupted.
     case corruptedData(_ message: String)
   }
   
