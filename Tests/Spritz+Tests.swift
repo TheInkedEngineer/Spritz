@@ -54,11 +54,11 @@ class SpritzTests: XCTestCase {
   
   func testIsValidForACertonPerson() {
     struct Person: SpritzInformationProvider {
-      var firstName = "Firas"
-      var lastName = "Safa"
-      var dateOfBirth = Date(timeIntervalSince1970: 699562877)
-      var sex = Sex.male
-      var placeOfBirth = "Libano"
+      var firstName = "First"
+      var lastName = "Last"
+      var dateOfBirth = Date(timeIntervalSince1970: 602562877)
+      var sex = Sex.female
+      var placeOfBirth = "Cagliari"
     }
     
     let person = Person()
