@@ -52,6 +52,22 @@ class SpritzTests: XCTestCase {
     XCTAssertTrue(result!)
   }
   
+  func testIsValidBoolForAllFields() {
+    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F"))
+  }
+  
+  func testIsValidBoolForFirstAndLastName() {
+    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.firstName, .lastName]))
+  }
+  
+  func testIsValidBoolForDateOfBirthAndSex() {
+    XCTAssertTrue(Spritz.isValid("ZZZZZZ92C02Z229W", inlcude: [.dateOfBirth, .sex]))
+  }
+  
+  func testIsValidBoolForPlaceOFBirth() {
+    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.placeOfBirth]))
+  }
+  
   func testIsValidForACertonPerson() {
     struct Person: SpritzInformationProvider {
       var firstName = "First"
@@ -63,9 +79,21 @@ class SpritzTests: XCTestCase {
     
     let person = Person()
     
-    let result = try? Spritz.isValid("SFAFRS92C02Z229F", for: person).get()
+    let result = try? Spritz.isValid("LSTFST89B44B354F", for: person).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
+  }
+  
+  func testIsValidBoolForACertonPerson() {
+    struct Person: SpritzInformationProvider {
+      var firstName = "First"
+      var lastName = "Last"
+      var dateOfBirth = Date(timeIntervalSince1970: 602562877)
+      var sex = Sex.female
+      var placeOfBirth = "Cagliari"
+    }
+    
+    XCTAssertTrue(Spritz.isValid("LSTFST89B44B354F", for: Person()))
   }
   
   func testFilterOmocodia() {

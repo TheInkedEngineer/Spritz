@@ -162,6 +162,25 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>info</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An object adhering to <code><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -178,7 +197,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Validates a <code>Codice Fiscale</code> checking only for the passed fields.</p>
+                        <p>Returns a <code>Result&lt;Bool, Spritz.ParsingError&gt;</code> based on the validation of the <code>Codice Fiscale</code> checking only for the passed fields.</p>
 
                       </div>
                       <div class="declaration">
@@ -247,6 +266,153 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>codice fiscale</code> to evaluate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>info</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An object adhering to <code><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC7isValid_7inlcudeSbSS_AA19CodiceFiscaleFieldsVtFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:inlcude:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_7inlcudeSbSS_AA19CodiceFiscaleFieldsVtFZ">isValid(_:inlcude:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>Bool</code> based on the validation of the <code>Codice Fiscale</code> checking only for the passed fields.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">inlcude</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>Codice Fiscale</code> to control.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fields</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></code> to check. Defaults to <code>.all</code>. If <code>.dateOfBirth</code> or <code>.sex</code> are excluded, both are not checked for they are related.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ">isValid(_:for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>Bool</code> based on a passed <code>Codice Fiscale</code> and information.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="k">for</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>codice fiscale</code> to evaluate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>info</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An object adhering to <code><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -311,7 +477,7 @@ This is a very high level check and should not be used unless necessary for lack
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/TheInkedEngineer/Spritz" target="_blank" rel="external">Firas Safa</a>. All rights reserved. (Last updated: 2020-02-10)</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/TheInkedEngineer/Spritz" target="_blank" rel="external">Firas Safa</a>. All rights reserved. (Last updated: 2020-02-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

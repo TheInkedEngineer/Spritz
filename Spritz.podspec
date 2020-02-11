@@ -5,19 +5,15 @@ Pod::Spec.new do |s|
     s.license          = "Apache 2.0"
     s.summary          = 'An italian tax number (AKA Codice Fiscale) creator and validator.'
     s.author           = { 'Firas Safa' => 'firas@theinkedengineer.com' }
-    s.source           = { :git => 'git@github.com:wise-emotions/ios-swift-magic.git', :tag => s.version.to_s }
+    s.source           = { :git => 'git@github.com:TheInkedEngineer/Spritz.git', :tag => s.version.to_s }
   
     s.swift_version    = '5.1'
   
     s.ios.deployment_target = '10.0'
     
-    s.ios.source_files = [
-      'Sources/*.swift'
-    ]
+    s.ios.source_files = ['Sources/*.swift']
   
     s.resource_bundles = {
-      'Spritz' => [
-        'Resources/*.csv'
-      ]
+      'Spritz' => ['Sources/Resources/*.csv']
     }
-  end
+end
