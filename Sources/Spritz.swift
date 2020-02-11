@@ -22,6 +22,7 @@ public class Spritz {
   // MARK: - Public Methods
   
   /// Generates the `Codice Fiscale` from the given information.
+  /// - Parameter info: An object adhering to `SpritzInformationProvider` protocol.
   public static func generateCF(from info: SpritzInformationProvider) throws -> String {
     let lastNameRepresentation = try Spritz.Transformer.lastName(from: info.lastName)
     let firstNameRepresentation = try Spritz.Transformer.firstName(from: info.firstName)
@@ -33,7 +34,7 @@ public class Spritz {
     return firstFifteenLetters + controlCharacter
   }
   
-  /// Validates a `Codice Fiscale` checking only for the passed fields.
+  /// Returns a `Result<Bool, Spritz.ParsingError>` based on the validation of the `Codice Fiscale` checking only for the passed fields.
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
@@ -91,6 +92,9 @@ public class Spritz {
   }
   
   /// Returns a `Result<Bool, Spritz.ParsingError>` based on a passed `Codice Fiscale` and information.
+  /// - Parameters:
+  ///   - codiceFiscale: The `codice fiscale` to evaluate.
+  ///   - info: An object adhering to `SpritzInformationProvider` protocol.
   public static func isValid(_ codiceFiscale: String, for info: SpritzInformationProvider) -> Result<Bool, Spritz.ParsingError> {
     guard codiceFiscale.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
     
@@ -112,12 +116,27 @@ public class Spritz {
     }
   }
   
+  /// Returns a `Bool` based on the validation of the `Codice Fiscale` checking only for the passed fields.
+  /// - Parameters:
+  ///   - codiceFiscale: The `Codice Fiscale` to control.
+  ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
+  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Bool {
+    (try? Spritz.isValid(codiceFiscale, inlcude: fields).get()) != nil
+  }
+  
+  /// Returns a `Bool` based on a passed `Codice Fiscale` and information.
+  /// - Parameters:
+  ///   - codiceFiscale: The `codice fiscale` to evaluate.
+  ///   - info: An object adhering to `SpritzInformationProvider` protocol.
+  public static func isValid(_ codiceFiscale: String, for info: SpritzInformationProvider) -> Bool {
+    (try? Spritz.isValid(codiceFiscale, for: info).get()) != nil
+  }
+  
   /// Checks if the passed `Codice FIscale` is properly structured regardless of info.
   /// This is a very high level check and should not be used unless necessary for lack of data.
   public static func isProperlyStructured(_ codiceFiscale: String) -> Bool {
     let pattern = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
-    let filteredCF = try? filterOmocodia(in: codiceFiscale)
-    let codiceFiscale = filteredCF ?? ""
+    let codiceFiscale = (try? filterOmocodia(in: codiceFiscale)) ?? ""
     let range = NSRange(location: 0, length: codiceFiscale.utf16.count)
     let regex = try? NSRegularExpression(pattern: pattern)
     return regex?.firstMatch(in: codiceFiscale, options: [], range: range) != nil
@@ -134,7 +153,7 @@ extension Spritz {
   internal static var bundle: Bundle? {
     let mainBundle = Bundle(for: Spritz.self)
     guard let path = mainBundle.path(forResource: "Spritz", ofType: "bundle") else {
-      return nil
+      return Bundle(for: Spritz.self)
     }
     let spritzBundle = Bundle(path: path)
     return spritzBundle
