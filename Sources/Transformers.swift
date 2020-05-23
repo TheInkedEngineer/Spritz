@@ -10,7 +10,7 @@ import Foundation
 
 internal extension Spritz {
   
-  /// Namespacing functions that do all the transformation
+  /// Name spacing functions that do all the transformation
   enum Transformer {}
 }
 
@@ -88,17 +88,17 @@ internal extension Spritz.Transformer {
   
   /// Extract the code associated to the place of birth.
   static func placeOfBirth(_ place: String) throws -> CodiceStatistico {
-    var occurence = Spritz.italianPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
-    if let comune = occurence { return comune.code }
-    occurence = Spritz.foreignPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
-    if let country = occurence { return country.code }
+    var occurrence = Spritz.italianPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
+    if let comune = occurrence { return comune.code }
+    occurrence = Spritz.foreignPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
+    if let country = occurrence { return country.code }
     throw Spritz.ParsingError.corruptedData("Could not find the codice statistico for \(place). Make sure the spelling was correct.")
   }
   
   /// Calculates the CF final control character based on the first 15 characters.
   /// - Parameter currentCF: The first 15 characters of the `Codice Fiscale`.
   static func controlCharacter(for currentCF: String) -> String {
-    assert(currentCF.count == 15, "The passed `CF` should be 15 chracters long. Received \(currentCF) instead.")
+    assert(currentCF.count == 15, "The passed `CF` should be 15 characters long. Received \(currentCF) instead.")
     
     let stringAsArrayOfCharacters = currentCF.map { String($0) }
     
@@ -184,7 +184,7 @@ internal extension Spritz.Transformer {
   
   /// The letter equivalent of each month.
   enum MonthRepresentation: Int, CaseIterable {
-    case A = 1, B, C, D, E, F, G, H, I, J, K, L
+    case A = 1, B, C, D, E, H, L, M, P, R, S, T
     
     init?(stringValue: String) {
       let found = MonthRepresentation.allCases.first { $0.asString == stringValue.uppercased()}
@@ -202,17 +202,17 @@ internal extension Spritz.Transformer {
     var maxDaysPerMonth: Int {
       switch self {
       case .A: return 31
-      case .B: return 29 // we assum it is 29, because there is no way to know if the year is leap or not from the two digits alone.
+      case .B: return 29 // we assume it is 29, because there is no way to know if the year is leap or not from the two digits alone.
       case .C: return 31
       case .D: return 30
       case .E: return 31
-      case .F: return 30
-      case .G: return 31
-      case .H: return 31
-      case .I: return 30
-      case .J: return 31
-      case .K: return 30
+      case .H: return 30
       case .L: return 31
+      case .M: return 31
+      case .P: return 30
+      case .R: return 31
+      case .S: return 30
+      case .T: return 31
       }
     }
   }
@@ -299,7 +299,7 @@ internal extension Spritz.Transformer {
       }
     }
     
-    /// The value of the ineger as a letter when substituted to overcome `Omocodia`.
+    /// The value of the integer as a letter when substituted to overcome `Omocodia`.
     var equivalentForOmocodia: String {
       switch self {
       case .zero : return "L"

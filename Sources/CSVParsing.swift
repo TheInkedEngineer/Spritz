@@ -9,7 +9,7 @@ import Foundation
 extension Spritz {
   /// List of possible decoding errors.
   public enum ParsingError: Error {
-    /// The `csv` file was not found.
+    /// The `CSV` file was not found.
     case fileNotFound
     /// A data being parsed is corrupted.
     case corruptedData(_ message: String)
@@ -26,16 +26,16 @@ extension Spritz {
   internal static func parseCSV(for country: Country) throws -> [PlaceOfBirth] {
     let fileName = country == .italy ? "comuni" : "stati"
     
-    guard let filepath = Spritz.bundle?.path(forResource: fileName, ofType: "csv") else {
+    guard let filePath = Spritz.bundle?.path(forResource: fileName, ofType: "csv") else {
       throw Spritz.ParsingError.fileNotFound
     }
     
-    guard let content = try? String(contentsOfFile: filepath) else {
+    guard let content = try? String(contentsOfFile: filePath) else {
       throw Spritz.ParsingError.corruptedData("Could not stringify the content of the file.")
     }
     
     return try content.components(separatedBy: "\n").compactMap { newEntry -> PlaceOfBirth? in
-      // For some reason, there is always an empty line at the end of the csv, when parsing its components.
+      // For some reason, there is always an empty line at the end of the CSV, when parsing its components.
       // This makes sure if that is the case, to return a nil which is filtered through the `compactMap`.
       if newEntry.isEmpty { return nil }
       

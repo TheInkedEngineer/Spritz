@@ -7,14 +7,14 @@
 import Foundation
 
 /// The main class of the pod. It can not be instantiated, nor it should be since all methods are static.
-/// It provides a variable `placesOfBirth` which is a tuple containing all places of birth divided by the two keys: `italian` and `foreign`.
+/// It provides a variable `placesOfBirth` which is a tuple containing all places of birth divided by the two keys: `Italian` and `foreign`.
 public class Spritz {
   // This class does not need to be instantiated.
   internal init() {}
   
   // MARK: - Public Properties
   
-  /// A tuple with two keys `italian` and `foreign`, each containing an array with all the places in italy and countries respectively.
+  /// A tuple with two keys `Italian` and `foreign`, each containing an array with all the places in Italy and countries respectively.
   public static var placesOfBirth: (italian: [String], foreign: [String]) {
     (italianPlacesOfBirth.map{$0.name}, foreignPlacesOfBirth.map{$0.name})
   }
@@ -38,7 +38,7 @@ public class Spritz {
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) throws -> Result<Bool, Spritz.ParsingError> {
+  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) throws -> Result<Bool, Spritz.ParsingError> {
     let filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
     let array = filteredFromOmocodia.uppercased().map { String($0) }
     guard array.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
@@ -121,7 +121,7 @@ public class Spritz {
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
   public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Bool {
-    (try? Spritz.isValid(codiceFiscale, inlcude: fields).get()) != nil
+    (try? Spritz.isValid(codiceFiscale, include: fields).get()) != nil
   }
   
   /// Returns a `Bool` based on a passed `Codice Fiscale` and information.
@@ -132,7 +132,7 @@ public class Spritz {
     (try? Spritz.isValid(codiceFiscale, for: info).get()) != nil
   }
   
-  /// Checks if the passed `Codice FIscale` is properly structured regardless of info.
+  /// Checks if the passed `Codice Fiscale` is properly structured regardless of info.
   /// This is a very high level check and should not be used unless necessary for lack of data.
   public static func isProperlyStructured(_ codiceFiscale: String) -> Bool {
     let pattern = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
@@ -146,7 +146,7 @@ public class Spritz {
 // MARK: - internal Properties
 
 extension Spritz {
-  /// The vowels in the italian language.
+  /// The vowels in the Italian language.
   internal static let italianVowels = "AEIOU"
   
   /// The `Spritz` bundle.
@@ -193,7 +193,7 @@ extension Spritz {
 internal extension Spritz {
   /// Omocodia is when two or more people has the same first and last name,
   /// born on the same day, of the same year from the same sex in the same municipality.
-  /// In such dase, starting from the most right number, one digit is changed from a number to a letter based on a special table.
+  /// In such case, starting from the most right number, one digit is changed from a number to a letter based on a special table.
   /// The control letter however remains the same. Therefore we can strip the CF from the conversions and treat it like a normal CF.
   static func filterOmocodia(in codiceFiscale: String) throws -> String {
     var array = codiceFiscale.uppercased().map { String($0) }
