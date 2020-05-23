@@ -98,7 +98,7 @@ internal extension Spritz.Transformer {
   /// Calculates the CF final control character based on the first 15 characters.
   /// - Parameter currentCF: The first 15 characters of the `Codice Fiscale`.
   static func controlCharacter(for currentCF: String) -> String {
-    assert(currentCF.count == 15, "The passed `CF` should be 15 chracters long. Received \(currentCF) instead.")
+    assert(currentCF.count == 15, "The passed `CF` should be 15 characters long. Received \(currentCF) instead.")
     
     let stringAsArrayOfCharacters = currentCF.map { String($0) }
     
@@ -202,7 +202,7 @@ internal extension Spritz.Transformer {
     var maxDaysPerMonth: Int {
       switch self {
       case .A: return 31
-      case .B: return 29 // we assum it is 29, because there is no way to know if the year is leap or not from the two digits alone.
+      case .B: return 29 // we assume it is 29, because there is no way to know if the year is leap or not from the two digits alone.
       case .C: return 31
       case .D: return 30
       case .E: return 31
@@ -299,7 +299,7 @@ internal extension Spritz.Transformer {
       }
     }
     
-    /// The value of the ineger as a letter when substituted to overcome `Omocodia`.
+    /// The value of the integer as a letter when substituted to overcome `Omocodia`.
     var equivalentForOmocodia: String {
       switch self {
       case .zero : return "L"
