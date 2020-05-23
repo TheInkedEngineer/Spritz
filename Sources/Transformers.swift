@@ -10,7 +10,7 @@ import Foundation
 
 internal extension Spritz {
   
-  /// Namespacing functions that do all the transformation
+  /// Name spacing functions that do all the transformation
   enum Transformer {}
 }
 
