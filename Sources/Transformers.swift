@@ -88,10 +88,10 @@ internal extension Spritz.Transformer {
   
   /// Extract the code associated to the place of birth.
   static func placeOfBirth(_ place: String) throws -> CodiceStatistico {
-    var occurence = Spritz.italianPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
-    if let comune = occurence { return comune.code }
-    occurence = Spritz.foreignPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
-    if let country = occurence { return country.code }
+    var occurrence = Spritz.italianPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
+    if let comune = occurrence { return comune.code }
+    occurrence = Spritz.foreignPlacesOfBirth.first { $0.name.lowercased().strippedForCF() == place.lowercased().strippedForCF() }
+    if let country = occurrence { return country.code }
     throw Spritz.ParsingError.corruptedData("Could not find the codice statistico for \(place). Make sure the spelling was correct.")
   }
   
@@ -184,7 +184,7 @@ internal extension Spritz.Transformer {
   
   /// The letter equivalent of each month.
   enum MonthRepresentation: Int, CaseIterable {
-    case A = 1, B, C, D, E, F, G, H, I, J, K, L
+    case A = 1, B, C, D, E, H, L, M, P, R, S, T
     
     init?(stringValue: String) {
       let found = MonthRepresentation.allCases.first { $0.asString == stringValue.uppercased()}
@@ -206,13 +206,13 @@ internal extension Spritz.Transformer {
       case .C: return 31
       case .D: return 30
       case .E: return 31
-      case .F: return 30
-      case .G: return 31
-      case .H: return 31
-      case .I: return 30
-      case .J: return 31
-      case .K: return 30
+      case .H: return 30
       case .L: return 31
+      case .M: return 31
+      case .P: return 30
+      case .R: return 31
+      case .S: return 30
+      case .T: return 31
       }
     }
   }
