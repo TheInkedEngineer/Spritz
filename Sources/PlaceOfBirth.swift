@@ -6,10 +6,10 @@
 
 import Foundation
 
-/// A `typealias` for a statistical code used to represent a country or an italian municipality.
+/// A `typealias` for a statistical code used to represent a country or an Italian municipality.
 public typealias CodiceStatistico = String
 
-/// A single italian municipality. There are over 7000 of them all over italy.
+/// A single Italian municipality. There are over 7000 of them all over Italy.
 /// Each one has a unique code, that code is used in the `Codice Fiscale`.
 struct PlaceOfBirth: Hashable {
   /// The `CodiceStatistico` of the municipality.

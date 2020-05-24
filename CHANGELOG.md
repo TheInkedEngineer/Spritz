@@ -11,6 +11,10 @@ All relative changes will be documented in this file. \
 ***
 
 ## 1.0.x
+### May 23, 2019
+
+* Fix a bug with the letters representation of the month.
+
 ### February 10, 2019
 
 * Initial release

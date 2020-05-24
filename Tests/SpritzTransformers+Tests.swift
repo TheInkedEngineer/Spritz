@@ -94,7 +94,7 @@ class SpritzValidatorTests: XCTestCase {
     
     // timeinterval 880151077 = 21 novembre 1997
     let letters2 = try! Spritz.Transformer.birthDateAndSex(sex: .female, birthdate: Date(timeIntervalSince1970: 880151077))
-    XCTAssertEqual(letters2, "97K61")
+    XCTAssertEqual(letters2, "97S61")
   }
   
   func testFetchingPlaceOfBirthCodeCorrectlyForeign() {

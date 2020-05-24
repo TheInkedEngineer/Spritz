@@ -24,9 +24,9 @@ public protocol SpritzInformationProvider {
   var dateOfBirth: Date { get set }
   /// The sex of the user.
   var sex: Sex { get set }
-  /// The italian province or country where the user was born.
-  /// Should use full name. Do not use abreviation, or any sort of representation.
-  /// Refer to `comuni.csv` or `stati.csv` for the proper names as per italian bureaucracy.
+  /// The Italian province or country where the user was born.
+  /// Should use full name. Do not use abbreviation, or any sort of representation.
+  /// Refer to `comuni.csv` or `stati.csv` for the proper names as per Italian bureaucracy.
   var placeOfBirth: String { get set }
 }
 
@@ -44,9 +44,9 @@ public struct CodiceFiscaleFields: OptionSet {
   public static let dateOfBirth = CodiceFiscaleFields(rawValue: 1 << 2)
   /// The sex of the user.
   public static let sex = CodiceFiscaleFields(rawValue: 1 << 3)
-  /// The italian province or country where the user was born.
-  /// Should use full name. Do not use abreviation, or any sort of representation.
-  /// Refer to `comuni.csv` or `stati.csv` for the proper names as per italian bureaucracy.
+  /// The Italian province or country where the user was born.
+  /// Should use full name. Do not use abbreviation, or any sort of representation.
+  /// Refer to `comuni.csv` or `stati.csv` for the proper names as per Italian bureaucracy.
   public static let placeOfBirth = CodiceFiscaleFields(rawValue: 1 << 4)
   /// A list containing all the possibile options.
   public static let all: CodiceFiscaleFields = [.firstName, .lastName, .dateOfBirth, .sex, .placeOfBirth]
