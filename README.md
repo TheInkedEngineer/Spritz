@@ -10,7 +10,7 @@
 
 # Spritz
 
-`Spritz` is an italian tax code (codice fiscale) generator and validator on steroids written in `Swift`.
+`Spritz` is an italian tax code ([codice fiscale](https://en.wikipedia.org/wiki/Italian_fiscal_code)) generator and validator on steroids written in `Swift`.
 
 It offers anything from simple regex validator, to complex analysis using the user's information, taking into account the [`omocodia`](https://it.wikipedia.org/wiki/Omocodia) phenomenon.
 
