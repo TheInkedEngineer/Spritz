@@ -17,17 +17,17 @@ public enum Sex: String {
 /// A protocol used by `Spritz` to generate and validate the `Codice Fiscale`.
 public protocol SpritzInformationProvider {
   /// The first name of the person.
-  var firstName: String { get set }
+  var firstName: String { get }
   /// The last name of the person.
-  var lastName: String { get set }
+  var lastName: String { get }
   /// The last name of the person.
-  var dateOfBirth: Date { get set }
+  var dateOfBirth: Date { get }
   /// The sex of the user.
-  var sex: Sex { get set }
+  var sex: Sex { get }
   /// The Italian province or country where the user was born.
   /// Should use full name. Do not use abbreviation, or any sort of representation.
   /// Refer to `comuni.csv` or `stati.csv` for the proper names as per Italian bureaucracy.
-  var placeOfBirth: String { get set }
+  var placeOfBirth: String { get }
 }
 
 /// An `OptionSet` containing all possible fields needed to generate the `Codice Fiscale`

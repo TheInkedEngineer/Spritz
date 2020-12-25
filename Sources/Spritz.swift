@@ -38,8 +38,17 @@ public class Spritz {
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) throws -> Result<Bool, Spritz.ParsingError> {
-    let filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
+  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) -> Result<Bool, Spritz.ParsingError> {
+    var filteredFromOmocodia = ""
+    do  {
+      filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
+    } catch {
+      guard let error = error as? Spritz.ParsingError else {
+        fatalError("Unexpected error. Spritz.filterOmocodia throws only Spritz.ParsingError errors.")
+      }
+      return .failure(error)
+    }
+    
     let array = filteredFromOmocodia.uppercased().map { String($0) }
     guard array.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
     
@@ -120,7 +129,7 @@ public class Spritz {
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Bool {
+  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) -> Bool {
     (try? Spritz.isValid(codiceFiscale, include: fields).get()) != nil
   }
   
@@ -203,7 +212,6 @@ internal extension Spritz {
     try possibleConvertedDigits.forEach { element in
       // numbers are to be changed from the most right to most left, not randomly.
       if foundDigit && Int(element) == nil { throw Spritz.ParsingError.corruptedData("Invalid CF.") }
-    
       if Character(element).isLetter {
         guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: element)?.rawValue else {
           throw Spritz.ParsingError.corruptedData(
