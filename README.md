@@ -22,18 +22,23 @@ The library is fully tested and documented.
 | Swift               | Spritz     |  iOS     |
 |-----------------|----------------|---------|
 |       5.1+          | 1.0.x               |  10+     |
+|       5.3+          | 2.0.x               |  10+     |
 
 # 2. Installation
+
+## Swift Package Manager
+Add inside the dependencies array the following line:
+`.package(url: "https://github.com/TheInkedEngineer/Spritz.git", from: "2.0.0")`
 
 ## Cocoapods
 
 Add the following line to your Podfile
-` pod 'Spritz' ~> '1.0.0' `
+` pod 'Spritz' ~> '2.0.0' `
 
 
 # 3. Documentation
 
-`Spritz` is fully documented. Checkout the documentation [**here**](https://theinkedengineer.github.io/Spritz/docs/1.0.x/index.html).
+`Spritz` is fully documented. Checkout the documentation [**here**](https://theinkedengineer.github.io/Spritz/docs/2.0.x/index.html).
 
 # 4. Code Example
 
