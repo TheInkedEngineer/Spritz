@@ -8,13 +8,21 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/Spritz" class="dashAnchor"></a>
     <a title="Spritz Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Spritz Docs</a> (100% documented)</p>
+        <p><a href="../index.html">Spritz 1.0.1 Docs</a> (100% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -78,6 +86,7 @@
             <h1>Spritz</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Spritz</span></code></pre>
 
                 </div>
@@ -143,7 +152,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                     <code>
                     <a name="/s:6SpritzAAC10generateCF4fromSSAA0A19InformationProvider_p_tKFZ"></a>
                     <a name="//apple_ref/swift/Method/generateCF(from:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6SpritzAAC10generateCF4fromSSAA0A19InformationProvider_p_tKFZ">generateCF(from:)</a>
+                    <a class="token" href="#/s:6SpritzAAC10generateCF4fromSSAA0A19InformationProvider_p_tKFZ">generateCF(from:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -187,9 +196,9 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:6SpritzAAC7isValid_7includes6ResultOySbAB12ParsingErrorOGSS_AA19CodiceFiscaleFieldsVtKFZ"></a>
+                    <a name="/s:6SpritzAAC7isValid_7includes6ResultOySbAB12ParsingErrorOGSS_AA19CodiceFiscaleFieldsVtFZ"></a>
                     <a name="//apple_ref/swift/Method/isValid(_:include:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6SpritzAAC7isValid_7includes6ResultOySbAB12ParsingErrorOGSS_AA19CodiceFiscaleFieldsVtKFZ">isValid(_:include:)</a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_7includes6ResultOySbAB12ParsingErrorOGSS_AA19CodiceFiscaleFieldsVtFZ">isValid(_:<wbr>include:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -204,7 +213,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">include</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="p">,</span> <span class="kt">Spritz</span><span class="o">.</span><span class="kt"><a href="../Classes/Spritz/ParsingError.html">ParsingError</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">include</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="p">,</span> <span class="kt">Spritz</span><span class="o">.</span><span class="kt"><a href="../Classes/Spritz/ParsingError.html">ParsingError</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -247,7 +256,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                     <code>
                     <a name="/s:6SpritzAAC7isValid_3fors6ResultOySbAB12ParsingErrorOGSS_AA0A19InformationProvider_ptFZ"></a>
                     <a name="//apple_ref/swift/Method/isValid(_:for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6SpritzAAC7isValid_3fors6ResultOySbAB12ParsingErrorOGSS_AA0A19InformationProvider_ptFZ">isValid(_:for:)</a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_3fors6ResultOySbAB12ParsingErrorOGSS_AA0A19InformationProvider_ptFZ">isValid(_:<wbr>for:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -303,9 +312,9 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:6SpritzAAC7isValid_7inlcudeSbSS_AA19CodiceFiscaleFieldsVtFZ"></a>
-                    <a name="//apple_ref/swift/Method/isValid(_:inlcude:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6SpritzAAC7isValid_7inlcudeSbSS_AA19CodiceFiscaleFieldsVtFZ">isValid(_:inlcude:)</a>
+                    <a name="/s:6SpritzAAC7isValid_7includeSbSS_AA19CodiceFiscaleFieldsVtFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:include:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_7includeSbSS_AA19CodiceFiscaleFieldsVtFZ">isValid(_:<wbr>include:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -320,7 +329,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">inlcude</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">include</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -363,7 +372,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                     <code>
                     <a name="/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ"></a>
                     <a name="//apple_ref/swift/Method/isValid(_:for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ">isValid(_:for:)</a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ">isValid(_:<wbr>for:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -421,7 +430,7 @@ It provides a variable <code>placesOfBirth</code> which is a tuple containing al
                     <code>
                     <a name="/s:6SpritzAAC20isProperlyStructuredySbSSFZ"></a>
                     <a name="//apple_ref/swift/Method/isProperlyStructured(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:6SpritzAAC20isProperlyStructuredySbSSFZ">isProperlyStructured(_:)</a>
+                    <a class="token" href="#/s:6SpritzAAC20isProperlyStructuredySbSSFZ">isProperlyStructured(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -477,8 +486,8 @@ This is a very high level check and should not be used unless necessary for lack
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/TheInkedEngineer/Spritz" target="_blank" rel="external">Firas Safa</a>. All rights reserved. (Last updated: 2020-05-23)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/TheInkedEngineer/Spritz" target="_blank" rel="external">Firas Safa</a>. All rights reserved. (Last updated: 2020-12-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

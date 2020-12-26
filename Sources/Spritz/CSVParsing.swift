@@ -26,10 +26,16 @@ extension Spritz {
   internal static func parseCSV(for country: Country) throws -> [PlaceOfBirth] {
     let fileName = country == .italy ? "comuni" : "stati"
 
+    #if SWIFT_PACKAGE
     guard let filePath = Bundle.module.url(forResource: fileName, withExtension: "csv")?.path else {
       throw Spritz.ParsingError.fileNotFound
     }
-    
+    #else
+    guard let filePath = Spritz.bundle?.path(forResource: fileName, ofType: "csv") else {
+      throw Spritz.ParsingError.fileNotFound
+    }
+    #endif
+
     guard let content = try? String(contentsOfFile: filePath) else {
       throw Spritz.ParsingError.corruptedData("Could not stringify the content of the file.")
     }
