@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
   name: "Spritz",
+  platforms: [
+    .macOS(.v10_15),
+    .iOS(.v10)
+  ],
   products: [
     .library(
       name: "Spritz",
@@ -25,5 +29,6 @@ let package = Package(
       name: "SpritzTests",
       dependencies: ["Spritz"]
     ),
-  ]
+  ],
+  swiftLanguageVersions: [.v5]
 )
