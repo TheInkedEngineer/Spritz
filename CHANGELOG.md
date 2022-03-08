@@ -1,6 +1,6 @@
 # CHANGELOG
 
-All notable changes to the projects will be documented in this file. \
+All notable changes to the project will be documented in this file. \
 `Spritz` adheres to [Semantic Versioning](https://semver.org).
 
 ## 2.0.0
