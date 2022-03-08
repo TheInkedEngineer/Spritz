@@ -2,15 +2,13 @@
 <img src="logo.png" alt="Spritz logo" width="200">
 </p>
 
-[![Twitter](https://img.shields.io/twitter/url/https/theinkedgineer.svg?label=TheInkedgineer&style=social)](https://twitter.com/theinkedgineer)
+[![Twitter](https://img.shields.io/twitter/url/https/theinkedgineer.svg?label=TheInkedgineer&style=social)](https://twitter.com/inkedengineer)
 ![Documentation](https://theinkedengineer.github.io/Spritz/docs/1.0.x/badge.svg)
-![PodVersion](https://img.shields.io/cocoapods/v/Spritz.svg)
 ![SwiftLang badge](https://img.shields.io/badge/language-Swift%205.1-orange.svg)
-![Platform](https://img.shields.io/cocoapods/p/Spritz.svg)
 
 # Spritz
 
-`Spritz` is an italian tax code ([codice fiscale](https://en.wikipedia.org/wiki/Italian_fiscal_code)) generator and validator on steroids written in `Swift`.
+`Spritz` is an Italian tax code ([codice fiscale](https://en.wikipedia.org/wiki/Italian_fiscal_code)) generator and validator on steroids written in `Swift`.
 
 It offers anything from simple regex validator, to complex analysis using the user's information, taking into account the [`omocodia`](https://it.wikipedia.org/wiki/Omocodia) phenomenon.
 
@@ -25,11 +23,41 @@ The library is fully tested and documented.
 
 # 2. Installation
 
-## Cocoapods
+## Swift Package Manager
 
-Add the following line to your Podfile
-` pod 'Spritz' ~> '1.0.0' `
+#### Package.swift
 
+Open your `Package.swift` file and add the following as your dependency. 
+
+```swift
+dependencies: [
+  .package(url: "https://github.com/TheInkedEngineer/Spritz", from: "2.0.0")
+]
+```
+
+Then add the following to your target's dependency:
+
+```swift
+targets: [
+  .target(
+    name: "MyTarget", 
+    dependencies: [
+      .product(name: "https://github.com/TheInkedEngineer/Spritz", package: "Spritz")
+    ]
+  )
+]
+```
+
+#### Xcode
+
+1. Open your app in Xcode
+1. In the **Project Navigator**, click on the project
+1. in the Project panel, click on the project
+1. Go to the **Package Dependencies** tab
+1. Click on the `+` button
+1. Insert the `https://github.com/TheInkedEngineer/Spritz` url in the search bar and press **Enter**
+1. Click on the `Add Package` button
+1. Follow the Xcode's dialog to install the SDK
 
 # 3. Documentation
 
@@ -82,9 +110,3 @@ let codice = try? Spritz.generateCF(from: Person())
 # 5. Contribution
 
 **Working on your first Pull Request?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
-
-## Generate the project
-
-To generate this project locally, you need [xcodegen](https://github.com/yonaskolb/XcodeGen). It is a great tool to customize a project and generate it on the go.
-
-You can either install it manually following their steps, or just run my `setup.sh` script. It automatically installs [Homebrew](https://brew.sh) if it is missing, installs `xcodegen`, removes existing (if present) `.xcodeproj`, run `xcodegen` and moves configuratiom files to their appropriate place.

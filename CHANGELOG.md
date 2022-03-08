@@ -1,20 +1,31 @@
 # CHANGELOG
 
-All relative changes will be documented in this file. \
+All notable changes to the project will be documented in this file. \
 `Spritz` adheres to [Semantic Versioning](https://semver.org).
 
-***
-### 1.X Releases
+## 2.0.0
 
-- `1.0.x` Releases - [1.0.x](#10x)
+### Added
 
-***
+- Add support for `Swift Package Manager`
 
-## 1.0.x
-### May 23, 2019
+### Changed
 
-* Fix a bug with the letters representation of the month.
+- Add support for MacOS 10.15
 
-### February 10, 2019
+### Fixed
 
-* Initial release
+### Removed
+
+- Remove Xcodegen
+- Remove setup.sh
+- Remove IDETemplateMacros.plist
+- Remove support for CocoaPods
+
+## 1.0.1
+### Fixed
+- Fix a bug with the letters representation of the month.
+
+## 1.0.0
+### Added
+- Initial release

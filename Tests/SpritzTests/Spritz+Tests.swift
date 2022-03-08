@@ -35,19 +35,19 @@ class SpritzTests: XCTestCase {
   }
   
   func testIsValidForFirstAndLastName() {
-    let result = try? Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.firstName, .lastName]).get()
+    let result = try? Spritz.isValid("SFAFRS92C02Z229F", include: [.firstName, .lastName]).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
   
   func testIsValidForDateOfBirthAndSex() {
-    let result = try? Spritz.isValid("ZZZZZZ92C02Z229W", inlcude: [.dateOfBirth, .sex]).get()
+    let result = try? Spritz.isValid("ZZZZZZ92C02Z229W", include: [.dateOfBirth, .sex]).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
   
   func testIsValidForPlaceOFBirth() {
-    let result = try? Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.placeOfBirth]).get()
+    let result = try? Spritz.isValid("SFAFRS92C02Z229F", include: [.placeOfBirth]).get()
     XCTAssertNotNil(result)
     XCTAssertTrue(result!)
   }
@@ -57,15 +57,15 @@ class SpritzTests: XCTestCase {
   }
   
   func testIsValidBoolForFirstAndLastName() {
-    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.firstName, .lastName]))
+    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", include: [.firstName, .lastName]))
   }
   
   func testIsValidBoolForDateOfBirthAndSex() {
-    XCTAssertTrue(Spritz.isValid("ZZZZZZ92C02Z229W", inlcude: [.dateOfBirth, .sex]))
+    XCTAssertTrue(Spritz.isValid("ZZZZZZ92C02Z229W", include: [.dateOfBirth, .sex]))
   }
   
   func testIsValidBoolForPlaceOFBirth() {
-    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", inlcude: [.placeOfBirth]))
+    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", include: [.placeOfBirth]))
   }
   
   func testIsValidForACertonPerson() {
@@ -84,7 +84,7 @@ class SpritzTests: XCTestCase {
     XCTAssertTrue(result!)
   }
   
-  func testIsValidBoolForACertonPerson() {
+  func testIsValidBoolForACertainPerson() {
     struct Person: SpritzInformationProvider {
       var firstName = "First"
       var lastName = "Last"

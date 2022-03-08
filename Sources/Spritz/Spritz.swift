@@ -120,7 +120,7 @@ public class Spritz {
   /// - Parameters:
   ///   - codiceFiscale: The `Codice Fiscale` to control.
   ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, inlcude fields: CodiceFiscaleFields = .all) -> Bool {
+  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) -> Bool {
     (try? Spritz.isValid(codiceFiscale, include: fields).get()) != nil
   }
   
@@ -151,12 +151,7 @@ extension Spritz {
   
   /// The `Spritz` bundle.
   internal static var bundle: Bundle? {
-    let mainBundle = Bundle(for: Spritz.self)
-    guard let path = mainBundle.path(forResource: "Spritz", ofType: "bundle") else {
-      return Bundle(for: Spritz.self)
-    }
-    let spritzBundle = Bundle(path: path)
-    return spritzBundle
+    Bundle.module
   }
   
   /// The object containing all municipalities with their respective data.
