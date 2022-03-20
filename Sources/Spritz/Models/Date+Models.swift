@@ -23,7 +23,7 @@ extension Spritz.Models {
     /// Creates an instance of `Spritz.Models.Date`.
     ///
     /// If invalid data is passed, the initializer will fail.
-    init?(
+    public init?(
       day: Int,
       month: Month,
       year: Int

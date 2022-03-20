@@ -57,11 +57,11 @@ final class DataNormalizerTests: XCTestCase {
   
   func test_checksum_correctly_calculated() {
     XCTAssertEqual(try! DataNormalizer.checksum(for: "RSSBBR69C48F839"), "A")
-    XCTAssertEqual(try! DataNormalizer.checksum(for: "SFAFRS92C02Z229"), "F")
+    XCTAssertEqual(try! DataNormalizer.checksum(for: "RIOLAI80T12Z112"), "N")
     XCTAssertEqual(try! DataNormalizer.checksum(for: "MRCMLD92C42D969"), "R")
-    XCTAssertEqual(try! DataNormalizer.checksum(for: "SFAFRS92C02Z22V"), "U")
-    XCTAssertEqual(try! DataNormalizer.checksum(for: "MRCMLD92C42D96V"), "G")
-    XCTAssertEqual(try! DataNormalizer.checksum(for: "SFAFRS92C02Z2NV"), "F")
+    XCTAssertEqual(try! DataNormalizer.checksum(for: "SFAFRS82C12Z22V"), "T")
+    XCTAssertEqual(try! DataNormalizer.checksum(for: "MRCMLD82C42D96V"), "E")
+    XCTAssertEqual(try! DataNormalizer.checksum(for: "SFAFRS82C02Z2NV"), "D")
   }
   
   // MARK: - Helpers

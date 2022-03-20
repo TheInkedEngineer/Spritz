@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Firas Safa on 10/03/22.
-//
-
 import XCTest
 @testable import Spritz
 

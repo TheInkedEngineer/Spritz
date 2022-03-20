@@ -5,7 +5,7 @@ public enum Spritz {
   public typealias CodiceFiscale = String
   
   /// A tuple with two keys `Italian` and `foreign`, each containing an array with all the places in Italy and countries respectively.
-  public static var placesOfBirth: (italian: [String], foreign: [String]) {
+  internal static var placesOfBirth: (italian: [String], foreign: [String]) {
     get throws {
       try (Spritz.italianPlacesOfBirth.map{$0.name}, Spritz.foreignPlacesOfBirth.map{$0.name})
     }
@@ -29,16 +29,30 @@ public enum Spritz {
   
   /// Generates the `Codice Fiscale` from the given information.
   ///
-  /// - Parameter info: An object adhering to `SpritzInformationProvider` protocol.
+  /// - Parameter info: An object adhering to `SpritzInformationProvider` protocol providing the necessary data.
+  /// - Returns: A 16 letter long string representing the fiscal code based on the provided data.
+  /// - Throws: `Spritz.Error.invalidData` if the data is not valid. That can occur if an unsupported character was passed, or the place of birth was invalid.
   public static func generateCF(from info: SpritzInformationProvider) throws -> CodiceFiscale {
+    let placeOfBirthRepresentation: String!
+    
     let lastNameRepresentation = DataNormalizer.normalize(lastName: info.lastName)
     let firstNameRepresentation = DataNormalizer.normalize(firstName: info.firstName)
     let dateAndSexRepresentation = DataNormalizer.normalize(date: info.dateOfBirth, sex: info.sex)
-    let placeOfBirthRepresentation = try DataNormalizer.normalize(placeOfBirth: info.placeOfBirth)
-    let firstFifteenLetters = lastNameRepresentation + firstNameRepresentation + dateAndSexRepresentation + placeOfBirthRepresentation
-    let controlCharacter = try DataNormalizer.checksum(for: firstFifteenLetters)
     
-    return firstFifteenLetters + controlCharacter
+    do {
+      placeOfBirthRepresentation = try DataNormalizer.normalize(placeOfBirth: info.placeOfBirth)
+    } catch {
+      
+      throw Spritz.Error.invalidData
+    }
+    
+    let checksumLessValue = lastNameRepresentation + firstNameRepresentation + dateAndSexRepresentation + placeOfBirthRepresentation
+    // It is ok to force unwrap.
+    // The motives why checksum fails, cannot occur here.
+    // The names are cleaned, and given that we are computing the `checksumLessValue` we are sure it is 15 letters long.
+    let checksum = try! DataNormalizer.checksum(for: checksumLessValue)
+    
+    return checksumLessValue + checksum
   }
   
   /// Checks whether or not a fiscal code is valid.
@@ -117,6 +131,27 @@ public enum Spritz {
     
     return true
   }
+  
+  /// Checks if the fiscal code matches the data of the user.
+  ///
+  /// This method takes into account omocodia, therefore it is preferred over generating your own fiscal code and comparing it.
+  /// If the provided fiscal code, or person data provided are invalid, this method will return false.
+  /// - Parameters:
+  ///   - fiscalCode: The fiscal code to validate.
+  ///   - person: The data related to the person.
+  /// - Returns: A Bool representing whether or no the fiscal code is valid for that person.
+  public static func isCorrect(fiscalCode: String, for person: SpritzInformationProvider) -> Bool {
+    guard
+      // Generate the correct fiscal code given the data.
+      let correctFiscalCode = try? generateCF(from: person),
+      // Filter the passed fiscal code from any possible omocodia.
+      let proposedFiscalCode = try? originalFiscalCode(from: fiscalCode)
+    else {
+      return false
+    }
+    
+    return correctFiscalCode == proposedFiscalCode
+  }
 }
 
 // MARK: - Helpers
@@ -144,6 +179,10 @@ internal extension Spritz {
   ///
   /// The control letter is recalculated. Therefore once the original numbers are restored, the checksum is changed as well.
   static func originalFiscalCode(from omocodia: CodiceFiscale) throws -> String {
+    guard omocodia.count == 16 else {
+      throw Spritz.Error.invalidFiscalCode
+    }
+    
     var characters = omocodia
       .map {
         $0

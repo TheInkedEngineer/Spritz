@@ -8,7 +8,7 @@ import Foundation
 
 extension Spritz.Models {
   /// Possible places of birth.
-  public enum PlaceOfBirth: CustomStringConvertible {
+  public enum PlaceOfBirth: CustomStringConvertible, Equatable {
     public var description: String {
       switch self {
         case let .italy(municipality):

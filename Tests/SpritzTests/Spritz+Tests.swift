@@ -11,14 +11,42 @@ final class SpritzTests: XCTestCase {
   
   func test_generatingCF() {
     struct Person: SpritzInformationProvider {
-      var firstName = "Firas"
-      var lastName = "Safa"
-      var dateOfBirth = Spritz.Models.Date(day: 2, month: .march, year: 1992)!
+      var firstName = "Ali"
+      var lastName = "Iorio"
+      var dateOfBirth = Spritz.Models.Date(day: 12, month: .december, year: 1980)!
       var sex = Spritz.Models.Sex.male
-      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "LIBano")
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "germania")
     }
     
-    XCTAssertEqual(try! Spritz.generateCF(from: Person()), "SFAFRS92C02Z229F")
+    XCTAssertEqual(try! Spritz.generateCF(from: Person()), "RIOLAI80T12Z112N")
+  }
+  
+  func test_generatingCF_throws_when_invalidPlaceOfBirth() {
+    struct Person: SpritzInformationProvider {
+      var firstName = "Ali"
+      var lastName = "Iorio"
+      var dateOfBirth = Spritz.Models.Date(day: 12, month: .december, year: 1980)!
+      var sex = Spritz.Models.Sex.male
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "asdfgadsgadg")
+    }
+    
+    XCTAssertThrowsError(try Spritz.generateCF(from: Person())) {
+      XCTAssertEqual($0 as! Spritz.Error, .invalidData)
+    }
+  }
+  
+  func test_generatingCF_throws_when_invalidCharacter() {
+    struct Person: SpritzInformationProvider {
+      var firstName = "Ali"
+      var lastName = "Iorio"
+      var dateOfBirth = Spritz.Models.Date(day: 12, month: .december, year: 1980)!
+      var sex = Spritz.Models.Sex.male
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "asdfgadsgadg")
+    }
+    
+    XCTAssertThrowsError(try Spritz.generateCF(from: Person())) {
+      XCTAssertEqual($0 as! Spritz.Error, .invalidData)
+    }
   }
   
   func test_validFiscalCodes() {
@@ -52,21 +80,58 @@ final class SpritzTests: XCTestCase {
     XCTAssertFalse(Spritz.isValid("RNLKCS49M41E999A"))
   }
   
+  func test_isCorrect_fiscalCode_givenPerson_return_true() {
+    struct Person: SpritzInformationProvider {
+      var firstName = "Ali"
+      var lastName = "Iorio"
+      var dateOfBirth = Spritz.Models.Date(day: 12, month: .december, year: 1980)!
+      var sex = Spritz.Models.Sex.male
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "germania")
+    }
+    
+    XCTAssertTrue(Spritz.isCorrect(fiscalCode: "RIOLAI80T12Z112N", for: Person()))
+  }
+  
+  func test_isCorrect_fiscalCode_givenPerson_return_false_if_fiscalCodeInvalid() {
+    struct Person: SpritzInformationProvider {
+      var firstName = "Ali"
+      var lastName = "Iorio"
+      var dateOfBirth = Spritz.Models.Date(day: 12, month: .december, year: 1980)!
+      var sex = Spritz.Models.Sex.male
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "germania")
+    }
+    
+    XCTAssertFalse(Spritz.isCorrect(fiscalCode: "asf", for: Person()))
+  }
+  
+  func test_isCorrect_fiscalCode_givenPerson_return_false_if_personDataInvalid() {
+    struct Person: SpritzInformationProvider {
+      var firstName = "Ali"
+      var lastName = "Iorio"
+      var dateOfBirth = Spritz.Models.Date(day: 12, month: .december, year: 1980)!
+      var sex = Spritz.Models.Sex.male
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "adsgdswghs")
+    }
+    
+    XCTAssertFalse(Spritz.isCorrect(fiscalCode: "RIOLAI80T12Z112N", for: Person()))
+  }
+  
   func test_extractingOriginalFiscalCode_from_Omocodia_returnsSame_when_alreadyOriginal() throws {
-    let fiscalCode = "SFAFRS92C02Z229F"
+    let fiscalCode = "RIOLAI80T12Z112N"
     
     XCTAssertEqual(try Spritz.originalFiscalCode(from: fiscalCode), fiscalCode)
   }
     
   func test_extractingOriginalFiscalCode_from_Omocodia() throws {
-    let filtered = try Spritz.originalFiscalCode(from: "SFAFRS92C02Z22VU")
-    XCTAssertEqual(filtered, "SFAFRS92C02Z229F")
-    
-    let filtered2 = try? Spritz.originalFiscalCode(from: "SFAFRS92C02Z2NVF")
-    XCTAssertEqual(filtered2, "SFAFRS92C02Z229F")
+    let filtered = try Spritz.originalFiscalCode(from: "MRCMLD92C42D96VG")
+    XCTAssertEqual(filtered, "MRCMLD92C42D969R")
   }
   
   func test_extractingOriginalFiscalCode_throws_whenCorrupted() {
+    XCTAssertThrowsError(try Spritz.originalFiscalCode(from: "safg")) {
+      XCTAssertEqual($0 as! Spritz.Error, .invalidFiscalCode)
+    }
+    
     XCTAssertThrowsError(try Spritz.originalFiscalCode(from: "SFAFRSA2C02Z229X")) {
       XCTAssertEqual($0 as! Spritz.Error, .invalidFiscalCode)
     }

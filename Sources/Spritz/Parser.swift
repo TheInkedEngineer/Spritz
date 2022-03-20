@@ -8,6 +8,7 @@ enum Parser {
   ///
   /// - Returns: An array of objects conforming to `PlaceOfBirth`.
   static func parse<T: PlaceOfBirthProvider>(_ file: Parser.File) throws -> [T] {
+    // Since we inject the file name from an enum, it will always be found.
     let filePath = Bundle.module.path(forResource: file.rawValue, ofType: "csv")!
     let content = try String(contentsOfFile: filePath)
     
@@ -68,9 +69,6 @@ extension Parser {
 extension Parser {
   /// Possible errors when parsing `CSV data`.
   enum Error: Swift.Error, Equatable {
-    /// The `CSV` file was not found.
-    case fileNotFound
-    
     /// A data being parsed is corrupted.
     case corruptedData(_ reason: Parser.File.Error)
   }
