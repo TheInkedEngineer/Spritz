@@ -1,6 +1,6 @@
 
 .build
-/swiftpm
+.swiftpm
 *.xcworkspace
 *.xcodeproj
 *.pbxuser
