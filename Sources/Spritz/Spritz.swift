@@ -32,7 +32,7 @@ public enum Spritz {
   /// - Parameter info: An object adhering to `SpritzInformationProvider` protocol providing the necessary data.
   /// - Returns: A 16 letter long string representing the fiscal code based on the provided data.
   /// - Throws: `Spritz.Error.invalidData` if the data is not valid. That can occur if an unsupported character was passed, or the place of birth was invalid.
-  public static func generateCF(from info: SpritzInformationProvider) throws -> CodiceFiscale {
+  public static func generateFiscalCode(from info: SpritzInformationProvider) throws -> CodiceFiscale {
     let placeOfBirthRepresentation: String!
     
     let lastNameRepresentation = DataNormalizer.normalize(lastName: info.lastName)
@@ -143,7 +143,7 @@ public enum Spritz {
   public static func isCorrect(fiscalCode: String, for person: SpritzInformationProvider) -> Bool {
     guard
       // Generate the correct fiscal code given the data.
-      let correctFiscalCode = try? generateCF(from: person),
+      let correctFiscalCode = try? generateFiscalCode(from: person),
       // Filter the passed fiscal code from any possible omocodia.
       let proposedFiscalCode = try? originalFiscalCode(from: fiscalCode)
     else {

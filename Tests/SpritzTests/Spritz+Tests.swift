@@ -18,7 +18,7 @@ final class SpritzTests: XCTestCase {
       var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "germania")
     }
     
-    XCTAssertEqual(try! Spritz.generateCF(from: Person()), "RIOLAI80T12Z112N")
+    XCTAssertEqual(try! Spritz.generateFiscalCode(from: Person()), "RIOLAI80T12Z112N")
   }
   
   func test_generatingCF_throws_when_invalidPlaceOfBirth() {
@@ -30,7 +30,7 @@ final class SpritzTests: XCTestCase {
       var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "asdfgadsgadg")
     }
     
-    XCTAssertThrowsError(try Spritz.generateCF(from: Person())) {
+    XCTAssertThrowsError(try Spritz.generateFiscalCode(from: Person())) {
       XCTAssertEqual($0 as! Spritz.Error, .invalidData)
     }
   }
@@ -44,7 +44,7 @@ final class SpritzTests: XCTestCase {
       var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "asdfgadsgadg")
     }
     
-    XCTAssertThrowsError(try Spritz.generateCF(from: Person())) {
+    XCTAssertThrowsError(try Spritz.generateFiscalCode(from: Person())) {
       XCTAssertEqual($0 as! Spritz.Error, .invalidData)
     }
   }
