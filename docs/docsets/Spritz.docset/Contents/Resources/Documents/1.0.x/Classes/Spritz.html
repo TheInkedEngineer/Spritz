@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Spritz Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Spritz" class="dashAnchor"></a>
+    <a title="Spritz Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Spritz Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Spritz Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Spritz Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Spritz.html">Spritz</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Spritz/ParsingError.html">– ParsingError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/Sex.html">Sex</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:6Spritz16CodiceStatisticoa">CodiceStatistico</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Spritz</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Spritz</span></code></pre>
+
+                </div>
+              </div>
+            <p>The main class of the pod. It can not be instantiated, nor it should be since all methods are static.
+It provides a variable <code>placesOfBirth</code> which is a tuple containing all places of birth divided by the two keys: <code>italian</code> and <code>foreign</code>.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Public%20Properties"></a>
+                <a name="//apple_ref/swift/Section/Public Properties" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Public%20Properties"></a>
+                  <h3 class="section-name"><p>Public Properties</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC13placesOfBirthSaySSG7italian_AD7foreigntvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/placesOfBirth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC13placesOfBirthSaySSG7italian_AD7foreigntvpZ">placesOfBirth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A tuple with two keys <code>italian</code> and <code>foreign</code>, each containing an array with all the places in italy and countries respectively.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">placesOfBirth</span><span class="p">:</span> <span class="p">(</span><span class="nv">italian</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">foreign</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Public%20Methods"></a>
+                <a name="//apple_ref/swift/Section/Public Methods" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Public%20Methods"></a>
+                  <h3 class="section-name"><p>Public Methods</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC10generateCF4fromSSAA0A19InformationProvider_p_tKFZ"></a>
+                    <a name="//apple_ref/swift/Method/generateCF(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC10generateCF4fromSSAA0A19InformationProvider_p_tKFZ">generateCF(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generates the <code>Codice Fiscale</code> from the given information.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">generateCF</span><span class="p">(</span><span class="n">from</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>info</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An object adhering to <code><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC7isValid_7inlcudes6ResultOySbAB12ParsingErrorOGSS_AA19CodiceFiscaleFieldsVtKFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:inlcude:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_7inlcudes6ResultOySbAB12ParsingErrorOGSS_AA19CodiceFiscaleFieldsVtKFZ">isValid(_:inlcude:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>Result&lt;Bool, Spritz.ParsingError&gt;</code> based on the validation of the <code>Codice Fiscale</code> checking only for the passed fields.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">inlcude</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="p">,</span> <span class="kt">Spritz</span><span class="o">.</span><span class="kt"><a href="../Classes/Spritz/ParsingError.html">ParsingError</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>Codice Fiscale</code> to control.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fields</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></code> to check. Defaults to <code>.all</code>. If <code>.dateOfBirth</code> or <code>.sex</code> are excluded, both are not checked for they are related.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC7isValid_3fors6ResultOySbAB12ParsingErrorOGSS_AA0A19InformationProvider_ptFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_3fors6ResultOySbAB12ParsingErrorOGSS_AA0A19InformationProvider_ptFZ">isValid(_:for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>Result&lt;Bool, Spritz.ParsingError&gt;</code> based on a passed <code>Codice Fiscale</code> and information.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="k">for</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="p">,</span> <span class="kt">Spritz</span><span class="o">.</span><span class="kt"><a href="../Classes/Spritz/ParsingError.html">ParsingError</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>codice fiscale</code> to evaluate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>info</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An object adhering to <code><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC7isValid_7inlcudeSbSS_AA19CodiceFiscaleFieldsVtFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:inlcude:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_7inlcudeSbSS_AA19CodiceFiscaleFieldsVtFZ">isValid(_:inlcude:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>Bool</code> based on the validation of the <code>Codice Fiscale</code> checking only for the passed fields.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">inlcude</span> <span class="nv">fields</span><span class="p">:</span> <span class="kt"><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">all</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>Codice Fiscale</code> to control.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fields</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/CodiceFiscaleFields.html">CodiceFiscaleFields</a></code> to check. Defaults to <code>.all</code>. If <code>.dateOfBirth</code> or <code>.sex</code> are excluded, both are not checked for they are related.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ"></a>
+                    <a name="//apple_ref/swift/Method/isValid(_:for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC7isValid_3forSbSS_AA0A19InformationProvider_ptFZ">isValid(_:for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>Bool</code> based on a passed <code>Codice Fiscale</code> and information.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isValid</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="k">for</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>codiceFiscale</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code>codice fiscale</code> to evaluate.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>info</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An object adhering to <code><a href="../Protocols/SpritzInformationProvider.html">SpritzInformationProvider</a></code> protocol.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC20isProperlyStructuredySbSSFZ"></a>
+                    <a name="//apple_ref/swift/Method/isProperlyStructured(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC20isProperlyStructuredySbSSFZ">isProperlyStructured(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Checks if the passed <code>Codice FIscale</code> is properly structured regardless of info.
+This is a very high level check and should not be used unless necessary for lack of data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">isProperlyStructured</span><span class="p">(</span><span class="n">_</span> <span class="nv">codiceFiscale</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6SpritzAAC12ParsingErrorO"></a>
+                    <a name="//apple_ref/swift/Enum/ParsingError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6SpritzAAC12ParsingErrorO">ParsingError</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>List of possible decoding errors.</p>
+
+                        <a href="../Classes/Spritz/ParsingError.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ParsingError</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2020 <a class="link" href="https://github.com/TheInkedEngineer/Spritz" target="_blank" rel="external">Firas Safa</a>. All rights reserved. (Last updated: 2020-02-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
