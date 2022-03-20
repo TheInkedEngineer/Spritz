@@ -11,7 +11,10 @@ All notable changes to the project will be documented in this file. \
 - Add support for `Swift Package Manager`
 - Add new Date format `Spritz.Models.Date`
 - Add new way to select the place of birth format `Spritz.Models.PlaceOfBirth`
-- Add concrete object that implements `SpritzInformationProvider` in `Spritz.Models.CodiceFiscale`
+- Add concrete object that implements `SpritzInformationProvider` in `Spritz.Models.CodiceFiscaleData`
+- Add new public errors `Spritz.Error`
+- Add `isValid(_: CodiceFiscale) -> Bool` to validate if a fiscal code is valid - supports omocodia
+- Add `isCorrect(fiscalCode: CodiceFiscale, for: SpritzInformationProvider) -> Bool` to validate a fiscal code against data
 
 ### Changed
 
@@ -25,6 +28,7 @@ All notable changes to the project will be documented in this file. \
 
 ### Removed
 
+- Remove throwing functions from public API
 - Remove `isProperlyStructured` regex validator.
 - Remove `CodiceFiscaleFields`. Validation should happen on all fields.
 - Remove Xcodegen

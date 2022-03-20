@@ -18,8 +18,9 @@ The library is fully tested and documented.
 # 1. Requirements and Compatibility
 
 | Swift               | Spritz     |  iOS     |
-|-----------------|----------------|---------|
-|       5.1+          | 1.0.x               |  10+     |
+|---------------------|------------|----------|
+|       5.1+          | 1.0.x      |  10+     |
+|       5.3+          | 2.0.x      |  10+     |
 
 # 2. Installation
 
@@ -61,50 +62,42 @@ targets: [
 
 # 3. Documentation
 
-`Spritz` is fully documented. Checkout the documentation [**here**](https://theinkedengineer.github.io/Spritz/docs/1.0.x/index.html).
+`Spritz` is fully documented. Checkout the documentation [**here**](https://theinkedengineer.github.io/Spritz/Documentation/documentation/spritz/index.html).
 
 # 4. Code Example
 
 ## Generating a `Codice Fiscale`
 
 ```swift
-struct Person: SpritzInformationProvider {
-  var firstName = "First"
-  var lastName = "Last"
-  var dateOfBirth = Date(timeIntervalSince1970: 602562877)
-  var sex = Sex.female
-  var placeOfBirth = "Cagliari"
-}
+let data = Spritz.Models.CodiceFiscaleData(
+  firstName: "First",
+  lastName: "last",
+  dateOfBirth: Spritz.Models.Date(day: 2, month: .april, year: 1987)!,
+  sex: .female,
+  placeOfBirth: .foreign(countryName: "francia")
+)
 
-let codice = try? Spritz.generateCF(from: Person())
+let codice = try? Spritz.generateCF(from: data)
 ```
 
 ## Validating a `Codice Fiscale`
 
 ```swift
-  struct Person: SpritzInformationProvider {
-    var firstName = "First"
-    var lastName = "Last"
-    var dateOfBirth = Date(timeIntervalSince1970: 602562877)
-    var sex = Sex.female
-    var placeOfBirth = "Cagliari"
-  }
-    
-  let result = try? Spritz.isValid("LSTFST89B44B354F", for: Person()).get()
+let result = Spritz.isValid("LSTFST89B44B354F")
 ```
 
-## Validating a `Codice Fiscale` with omocodia
+## Validating a `Codice Fiscale` against data
 
 ```swift
-  struct Person: SpritzInformationProvider {
-    var firstName = "First"
-    var lastName = "Last"
-    var dateOfBirth = Date(timeIntervalSince1970: 602562877)
-    var sex = Sex.female
-    var placeOfBirth = "Cagliari"
-  }
-  // the conversion is done automatically.
-  let result = try? Spritz.isValid("LSTFST89B44B35QF", for: Person()).get()
+let data = Spritz.Models.CodiceFiscaleData(
+  firstName: "First",
+  lastName: "last",
+  dateOfBirth: Spritz.Models.Date(day: 2, month: .april, year: 1987)!,
+  sex: .female,
+  placeOfBirth: .foreign(countryName: "francia")
+)
+    
+let result = Spritz.isCorrect(fiscalCode: "LSTFST89B44B354F", for: data)
 ```
 
 # 5. Contribution
