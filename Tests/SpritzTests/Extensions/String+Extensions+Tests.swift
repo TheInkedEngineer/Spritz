@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Spritz
 
-class StringExtensionsTests: XCTestCase {
+final class StringExtensionsTests: XCTestCase {
   
   func testNameCleanup1() {
     var name = "de luca"
@@ -34,5 +34,9 @@ class StringExtensionsTests: XCTestCase {
     let strippedName = name.strippedForCF()
     XCTAssertEqual(name, "salvà")
     XCTAssertEqual(strippedName, "salva")
+  }
+  
+  func test_strippedChecksum() {
+    XCTAssertEqual("XXXXXXNNXNNXNNNX".strippedChecksum(), "XXXXXXNNXNNXNNN")
   }
 }

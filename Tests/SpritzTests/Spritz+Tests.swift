@@ -1,123 +1,82 @@
-//
-//  Spritz
-//
-//  Copyright © TheInkedEngineer. All rights reserved.
-// 
-
 import Foundation
 import XCTest
 
 @testable import Spritz
 
-class SpritzTests: XCTestCase {
-  
+final class SpritzTests: XCTestCase {
   func testPlacesOfBirthReturnTupleWithCorrectNumberOfElements() {
-    XCTAssertEqual(Spritz.placesOfBirth.italian.count, 8229)
-    XCTAssertEqual(Spritz.placesOfBirth.foreign.count, 248)
+    XCTAssertEqual(try! Spritz.placesOfBirth.italian.count, 8229)
+    XCTAssertEqual(try! Spritz.placesOfBirth.foreign.count, 248)
   }
   
-  func testGeneratingCF() {
+  func test_generatingCF() {
     struct Person: SpritzInformationProvider {
       var firstName = "Firas"
       var lastName = "Safa"
-      var dateOfBirth = Date(timeIntervalSince1970: 699562877)
-      var sex = Sex.male
-      var placeOfBirth = "Libano"
+      var dateOfBirth = Spritz.Models.Date(day: 2, month: .march, year: 1992)!
+      var sex = Spritz.Models.Sex.male
+      var placeOfBirth = Spritz.Models.PlaceOfBirth.foreign(countryName: "LIBano")
     }
     
     XCTAssertEqual(try! Spritz.generateCF(from: Person()), "SFAFRS92C02Z229F")
   }
   
-  func testIsValidForAllFields() {
-    let result = try? Spritz.isValid("SFAFRS92C02Z229F").get()
-    XCTAssertNotNil(result)
-    XCTAssertTrue(result!)
+  func test_validFiscalCodes() {
+    XCTAssertTrue(Spritz.isValid("FYFQNG56A56L292G"))
+    XCTAssertTrue(Spritz.isValid("BPCPHG61L19D964J"))
+    XCTAssertTrue(Spritz.isValid("RRYNYX98M51B246E"))
+    XCTAssertTrue(Spritz.isValid("VMTSRF99L64I745C"))
+    XCTAssertTrue(Spritz.isValid("BTMLSZ40C46H152F"))
+    XCTAssertTrue(Spritz.isValid("JTKDDV98T57G187N"))
+    XCTAssertTrue(Spritz.isValid("RNLKCS49M41E309A"))
+    XCTAssertTrue(Spritz.isValid("YKASKZ88S08G120R"))
   }
   
-  func testIsValidForFirstAndLastName() {
-    let result = try? Spritz.isValid("SFAFRS92C02Z229F", include: [.firstName, .lastName]).get()
-    XCTAssertNotNil(result)
-    XCTAssertTrue(result!)
-  }
-  
-  func testIsValidForDateOfBirthAndSex() {
-    let result = try? Spritz.isValid("ZZZZZZ92C02Z229W", include: [.dateOfBirth, .sex]).get()
-    XCTAssertNotNil(result)
-    XCTAssertTrue(result!)
-  }
-  
-  func testIsValidForPlaceOFBirth() {
-    let result = try? Spritz.isValid("SFAFRS92C02Z229F", include: [.placeOfBirth]).get()
-    XCTAssertNotNil(result)
-    XCTAssertTrue(result!)
-  }
-  
-  func testIsValidBoolForAllFields() {
-    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F"))
-  }
-  
-  func testIsValidBoolForFirstAndLastName() {
-    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", include: [.firstName, .lastName]))
-  }
-  
-  func testIsValidBoolForDateOfBirthAndSex() {
-    XCTAssertTrue(Spritz.isValid("ZZZZZZ92C02Z229W", include: [.dateOfBirth, .sex]))
-  }
-  
-  func testIsValidBoolForPlaceOFBirth() {
-    XCTAssertTrue(Spritz.isValid("SFAFRS92C02Z229F", include: [.placeOfBirth]))
-  }
-  
-  func testIsValidForACertonPerson() {
-    struct Person: SpritzInformationProvider {
-      var firstName = "First"
-      var lastName = "Last"
-      var dateOfBirth = Date(timeIntervalSince1970: 602562877)
-      var sex = Sex.female
-      var placeOfBirth = "Cagliari"
-    }
+  func test_invalidFiscalCodes() {
+    // Fake invalid omocodia
+    XCTAssertFalse(Spritz.isValid("SFAFRS92C02ZN2ZW"))
     
-    let person = Person()
+    // Letter in name is number
+    XCTAssertFalse(Spritz.isValid("1YFQNG56A56L292G"))
     
-    let result = try? Spritz.isValid("LSTFST89B44B354F", for: person).get()
-    XCTAssertNotNil(result)
-    XCTAssertTrue(result!)
+    // Invalid day
+    XCTAssertFalse(Spritz.isValid("VMTSRF99L94I745C"))
+    
+    // Invalid foreign country
+    XCTAssertFalse(Spritz.isValid("RNLKCS49M41Z999A"))
+    
+    // Invalid municipality
+    XCTAssertFalse(Spritz.isValid("RNLKCS49M41E000S"))
+    
+    // Invalid Checksum.
+    XCTAssertFalse(Spritz.isValid("RNLKCS49M41E999A"))
   }
   
-  func testIsValidBoolForACertainPerson() {
-    struct Person: SpritzInformationProvider {
-      var firstName = "First"
-      var lastName = "Last"
-      var dateOfBirth = Date(timeIntervalSince1970: 602562877)
-      var sex = Sex.female
-      var placeOfBirth = "Cagliari"
-    }
+  func test_extractingOriginalFiscalCode_from_Omocodia_returnsSame_when_alreadyOriginal() throws {
+    let fiscalCode = "SFAFRS92C02Z229F"
     
-    XCTAssertTrue(Spritz.isValid("LSTFST89B44B354F", for: Person()))
+    XCTAssertEqual(try Spritz.originalFiscalCode(from: fiscalCode), fiscalCode)
   }
-  
-  func testFilterOmocodia() {
-    let filtered = try? Spritz.filterOmocodia(in: "SFAFRS92C02Z22VF")
+    
+  func test_extractingOriginalFiscalCode_from_Omocodia() throws {
+    let filtered = try Spritz.originalFiscalCode(from: "SFAFRS92C02Z22VU")
     XCTAssertEqual(filtered, "SFAFRS92C02Z229F")
     
-    let filtered2 = try? Spritz.filterOmocodia(in: "SFAFRS92C02Z2NVF")
+    let filtered2 = try? Spritz.originalFiscalCode(from: "SFAFRS92C02Z2NVF")
     XCTAssertEqual(filtered2, "SFAFRS92C02Z229F")
-    
-    do {
-      _ = try Spritz.filterOmocodia(in: "SFAFRS92C02ZN2VF")
-    } catch let error {
-      guard case Spritz.ParsingError.corruptedData("Invalid CF.") = error else {
-        XCTFail()
-        return
-      }
-      XCTAssertTrue(true)
-    }
   }
   
-  func testShallowIsProperlyConfigured() {
-    XCTAssertTrue(Spritz.isProperlyStructured("SFAFRS92C02Z229F"))
-    XCTAssertTrue(Spritz.isProperlyStructured("SFAFRS92C02Z22VF"))
-    XCTAssertFalse(Spritz.isProperlyStructured("SFAFRS92C02ZN2VF"))
-    XCTAssertFalse(Spritz.isProperlyStructured("S2AFRS92C02Z22VF"))
+  func test_extractingOriginalFiscalCode_throws_whenCorrupted() {
+    XCTAssertThrowsError(try Spritz.originalFiscalCode(from: "SFAFRSA2C02Z229X")) {
+      XCTAssertEqual($0 as! Spritz.Error, .invalidFiscalCode)
+    }
+    
+    XCTAssertThrowsError(try Spritz.originalFiscalCode(from: "SFAFRS92C02ZN2VJ")) {
+      XCTAssertEqual($0 as! Spritz.Error, .invalidFiscalCode)
+    }
+    
+    XCTAssertThrowsError(try Spritz.originalFiscalCode(from: "SFAFRS92C02ZN2ZW")) {
+      XCTAssertEqual($0 as! Spritz.Error, .invalidFiscalCode)
+    }
   }
 }

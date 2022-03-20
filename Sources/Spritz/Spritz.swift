@@ -1,217 +1,192 @@
-//
-//  Spritz
-//
-//  Copyright © TheInkedEngineer. All rights reserved.
-// 
-
 import Foundation
 
-/// The main class of the pod. It can not be instantiated, nor it should be since all methods are static.
-/// It provides a variable `placesOfBirth` which is a tuple containing all places of birth divided by the two keys: `Italian` and `foreign`.
-public class Spritz {
-  // This class does not need to be instantiated.
-  internal init() {}
-  
-  // MARK: - Public Properties
+public enum Spritz {
+  /// A name-compatible typealias for a String representing a fiscal code.
+  public typealias CodiceFiscale = String
   
   /// A tuple with two keys `Italian` and `foreign`, each containing an array with all the places in Italy and countries respectively.
   public static var placesOfBirth: (italian: [String], foreign: [String]) {
-    (italianPlacesOfBirth.map{$0.name}, foreignPlacesOfBirth.map{$0.name})
-  }
-  
-  // MARK: - Public Methods
-  
-  /// Generates the `Codice Fiscale` from the given information.
-  /// - Parameter info: An object adhering to `SpritzInformationProvider` protocol.
-  public static func generateCF(from info: SpritzInformationProvider) throws -> String {
-    let lastNameRepresentation = try Spritz.Transformer.lastName(from: info.lastName)
-    let firstNameRepresentation = try Spritz.Transformer.firstName(from: info.firstName)
-    let dateAndSexRepresentation = try Spritz.Transformer.birthDateAndSex(sex: info.sex, birthdate: info.dateOfBirth)
-    let placeOfBirthRepresentation = try Spritz.Transformer.placeOfBirth(info.placeOfBirth)
-    let firstFifteenLetters = lastNameRepresentation + firstNameRepresentation + dateAndSexRepresentation + placeOfBirthRepresentation
-    let controlCharacter = Spritz.Transformer.controlCharacter(for: firstFifteenLetters)
-    
-    return firstFifteenLetters + controlCharacter
-  }
-  
-  /// Returns a `Result<Bool, Spritz.ParsingError>` based on the validation of the `Codice Fiscale` checking only for the passed fields.
-  /// - Parameters:
-  ///   - codiceFiscale: The `Codice Fiscale` to control.
-  ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) throws -> Result<Bool, Spritz.ParsingError> {
-    let filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
-    let array = filteredFromOmocodia.uppercased().map { String($0) }
-    guard array.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
-    
-    if fields.contains(.lastName) {
-      let lastNameAreLetters = array[0...2].filter { Character($0).isLetter }.count == 3
-      guard lastNameAreLetters else { return .failure(.corruptedData("First three elements should be letters.")) }
+    get throws {
+      try (Spritz.italianPlacesOfBirth.map{$0.name}, Spritz.foreignPlacesOfBirth.map{$0.name})
     }
-    
-    if fields.contains(.firstName) {
-      let firstNameAreLetters = array[3...5].filter { Character($0).isLetter }.count == 3
-      guard firstNameAreLetters else { return .failure(.corruptedData("Element 4, 5 and 6 should be letters.")) }
-    }
-    
-    if fields.contains([.dateOfBirth, .sex]) {
-      let yearOfBirthIsInt = Int(array[6]) != nil && Int(array[7]) != nil
-      guard yearOfBirthIsInt else { return .failure(.corruptedData("Element 5 and 6 represent a year and should be numbers.")) }
-      
-      
-      let monthOfBirth = Spritz.Transformer.MonthRepresentation(stringValue: array[8])
-      guard let month = monthOfBirth else { return .failure(.corruptedData("The month letter should be between A and L included."))}
-      
-      guard
-        let day = Int(array[9...10].reduce("") { $0 + $1 }),
-        day > 0 && day < 72,
-        (day <= month.maxDaysPerMonth || (day > 40 && day <= month.maxDaysPerMonth + 30))
-        else {
-          return .failure(
-            .corruptedData(
-              """
-              Based on the sex and month, the day is not valid. Should be between 0 and \(month.maxDaysPerMonth)" if male,
-              or between 41 and \(month.maxDaysPerMonth + 30) if female.
-              """
-            ))
-      }
-    }
-    
-    if fields.contains(.placeOfBirth) {
-      let placeOfBirth = array[11] != "Z" ?
-        Spritz.italianPlacesOfBirth.first { $0.code == array[11...14].reduce("") { $0 + $1 }} :
-        Spritz.foreignPlacesOfBirth.first { $0.code == array[11...14].reduce("") { $0 + $1 }}
-      guard placeOfBirth != nil else { return .failure(.corruptedData("The 4 digits representing place of birth are not valid.")) }
-    }
-    
-    let firstFifteenLetters = array[0...14].reduce("") { $0 + $1 }
-    guard Spritz.Transformer.controlCharacter(for: firstFifteenLetters) == array[15] else {
-      return .failure(.corruptedData("\(Spritz.Transformer.controlCharacter(for: firstFifteenLetters)) but got \(array[15]) instead."))
-    }
-    
-    return .success(true)
-  }
-  
-  /// Returns a `Result<Bool, Spritz.ParsingError>` based on a passed `Codice Fiscale` and information.
-  /// - Parameters:
-  ///   - codiceFiscale: The `codice fiscale` to evaluate.
-  ///   - info: An object adhering to `SpritzInformationProvider` protocol.
-  public static func isValid(_ codiceFiscale: String, for info: SpritzInformationProvider) -> Result<Bool, Spritz.ParsingError> {
-    guard codiceFiscale.count == 16 else { return .failure(.corruptedData("CF should be 16 character long")) }
-    
-    do {
-      let filteredFromOmocodia = try Spritz.filterOmocodia(in: codiceFiscale)
-      let generatedCF = try Spritz.generateCF(from: info)
-      guard generatedCF == filteredFromOmocodia.uppercased() else {
-        return .failure(.corruptedData("The CF is valid, but does not belong to this user."))
-      }
-      return .success(true)
-    } catch let error {
-      guard let error = error as? Spritz.ParsingError else {
-        fatalError("Unexpected error.")
-      }
-      switch error {
-      case .fileNotFound: return .failure(.fileNotFound)
-      case .corruptedData(let message): return .failure(.corruptedData(message))
-      }
-    }
-  }
-  
-  /// Returns a `Bool` based on the validation of the `Codice Fiscale` checking only for the passed fields.
-  /// - Parameters:
-  ///   - codiceFiscale: The `Codice Fiscale` to control.
-  ///   - fields: The `CodiceFiscaleFields` to check. Defaults to `.all`. If `.dateOfBirth` or `.sex` are excluded, both are not checked for they are related.
-  public static func isValid(_ codiceFiscale: String, include fields: CodiceFiscaleFields = .all) -> Bool {
-    (try? Spritz.isValid(codiceFiscale, include: fields).get()) != nil
-  }
-  
-  /// Returns a `Bool` based on a passed `Codice Fiscale` and information.
-  /// - Parameters:
-  ///   - codiceFiscale: The `codice fiscale` to evaluate.
-  ///   - info: An object adhering to `SpritzInformationProvider` protocol.
-  public static func isValid(_ codiceFiscale: String, for info: SpritzInformationProvider) -> Bool {
-    (try? Spritz.isValid(codiceFiscale, for: info).get()) != nil
-  }
-  
-  /// Checks if the passed `Codice Fiscale` is properly structured regardless of info.
-  /// This is a very high level check and should not be used unless necessary for lack of data.
-  public static func isProperlyStructured(_ codiceFiscale: String) -> Bool {
-    let pattern = "^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$"
-    let codiceFiscale = (try? filterOmocodia(in: codiceFiscale)) ?? ""
-    let range = NSRange(location: 0, length: codiceFiscale.utf16.count)
-    let regex = try? NSRegularExpression(pattern: pattern)
-    return regex?.firstMatch(in: codiceFiscale, options: [], range: range) != nil
-  }
-}
-
-// MARK: - internal Properties
-
-extension Spritz {
-  /// The vowels in the Italian language.
-  internal static let italianVowels = "AEIOU"
-  
-  /// The `Spritz` bundle.
-  internal static var bundle: Bundle? {
-    Bundle.module
   }
   
   /// The object containing all municipalities with their respective data.
-  internal static var italianPlacesOfBirth: [PlaceOfBirth] {
-    do { return try Spritz.parseCSV(for: .italy) }
-    catch let error {
-      guard let error = error as? Spritz.ParsingError else {
-        fatalError("Unexpected error.")
-      }
-      switch error {
-      case .fileNotFound: fatalError("could not locate the file.")
-      case .corruptedData(let message): fatalError("\(message)")
-      }
+  internal static var italianPlacesOfBirth: [Spritz.Models.Municipality] {
+    get throws {
+      try Parser.parse(.comuni)
     }
   }
   
   /// The object containing all countries with their respective data.
-  internal static var foreignPlacesOfBirth: [PlaceOfBirth] {
-    do { return try Spritz.parseCSV(for: .foreign) }
-    catch let error {
-      guard let error = error as? Spritz.ParsingError else {
-        fatalError("Unexpected error.")
+  internal static var foreignPlacesOfBirth: [Spritz.Models.Country] {
+    get throws {
+      try Parser.parse(.stati)
+    }
+  }
+  
+  // MARK: - Functions
+  
+  /// Generates the `Codice Fiscale` from the given information.
+  ///
+  /// - Parameter info: An object adhering to `SpritzInformationProvider` protocol.
+  public static func generateCF(from info: SpritzInformationProvider) throws -> CodiceFiscale {
+    let lastNameRepresentation = DataNormalizer.normalize(lastName: info.lastName)
+    let firstNameRepresentation = DataNormalizer.normalize(firstName: info.firstName)
+    let dateAndSexRepresentation = DataNormalizer.normalize(date: info.dateOfBirth, sex: info.sex)
+    let placeOfBirthRepresentation = try DataNormalizer.normalize(placeOfBirth: info.placeOfBirth)
+    let firstFifteenLetters = lastNameRepresentation + firstNameRepresentation + dateAndSexRepresentation + placeOfBirthRepresentation
+    let controlCharacter = try DataNormalizer.checksum(for: firstFifteenLetters)
+    
+    return firstFifteenLetters + controlCharacter
+  }
+  
+  /// Checks whether or not a fiscal code is valid.
+  ///
+  /// - Parameters:
+  ///   - value: The `CodiceFiscale` to control.
+  ///
+  /// - Returns: `true` if valid. `false` otherwise.
+  public static func isValid(_ value: CodiceFiscale) -> Bool {
+    // Help evaluating the fiscal code in case an omocodia version is passed.
+    guard let codiceFiscale = try? originalFiscalCode(from: value) else {
+      return false
+    }
+    
+    let content = codiceFiscale.map {
+      $0
+    }
+    
+    guard
+      content[0].isLetter,
+      content[1].isLetter,
+      content[2].isLetter,
+      content[3].isLetter,
+      content[4].isLetter,
+      content[5].isLetter,
+      content[6].isNumber,
+      content[7].isNumber,
+      let month = Models.Date.Month(letterRepresentation: content[8]),
+      content[11].isLetter,
+      content[12].isNumber,
+      content[13].isNumber,
+      content[14].isNumber,
+      content[15].isLetter
+    else {
+      return false
+    }
+    
+    guard
+      let day = Int(
+        content[9...10]
+          .reduce(into: "") {
+            $0 += String($1)
+          }
+      ),
+      Models.Date.isValid(day: day, in: month)
+    else {
+      return false
+    }
+    
+    let placeOfBirthCode = content[11...14].map {
+      String($0)
+    }.joined(separator: "")
+    
+    if content[11].uppercased() == "Z" {
+      guard
+        let places = try? Spritz.foreignPlacesOfBirth,
+        places.contains(where: { $0.code == placeOfBirthCode })
+      else {
+        return false
       }
-      switch error {
-      case .fileNotFound: fatalError("could not locate the file.")
-      case .corruptedData(let message): fatalError("\(message)")
+    } else {
+      guard
+        let places = try? Spritz.italianPlacesOfBirth,
+        places.contains(where: { $0.code == placeOfBirthCode })
+      else {
+        return false
       }
     }
+    
+    guard
+      let expectedChecksum = try? DataNormalizer.checksum(for: value.strippedChecksum()),
+      Character(expectedChecksum) == content[15]
+    else {
+      return false
+    }
+    
+    return true
   }
 }
 
 // MARK: - Helpers
 
 internal extension Spritz {
-  /// Omocodia is when two or more people has the same first and last name,
-  /// born on the same day, of the same year from the same sex in the same municipality.
-  /// In such case, starting from the most right number, one digit is changed from a number to a letter based on a special table.
-  /// The control letter however remains the same. Therefore we can strip the CF from the conversions and treat it like a normal CF.
-  static func filterOmocodia(in codiceFiscale: String) throws -> String {
-    var array = codiceFiscale.uppercased().map { String($0) }
-    let possibleConvertedDigits = [array[14], array[13], array[12], array[10], array[9], array[7], array[6]]
-    var foundDigit = false
+  /// Returns the same fiscal code, filtering out any possible altered values caused by [omocodia](https://it.wikipedia.org/wiki/Omocodia).
+  ///
+  /// Omocodia occurs when two or more people has:
+  /// - The same first and last name
+  /// - Born on the same day, of the same year
+  /// - From the same sex
+  /// - In the same place
+  ///
+  /// A fiscal code has digits in the following positions (where first element is in position 0):
+  /// - 6
+  /// - 7
+  /// - 9
+  /// - 10
+  /// - 12
+  /// - 13
+  /// - 14
+  ///
+  /// The algorithm consists of substituting the digits in the previously mentioned positions with a digit follow the map found in `Spritz.Models.SingleDigitNumber.omocodiaValue`.
+  /// The change starts from the most right element (last position).
+  ///
+  /// The control letter is recalculated. Therefore once the original numbers are restored, the checksum is changed as well.
+  static func originalFiscalCode(from omocodia: CodiceFiscale) throws -> String {
+    var characters = omocodia
+      .map {
+        $0
+      }
     
-    try possibleConvertedDigits.forEach { element in
-      // numbers are to be changed from the most right to most left, not randomly.
-      if foundDigit && Int(element) == nil { throw Spritz.ParsingError.corruptedData("Invalid CF.") }
+    // Create an array of characters in the digits position.
+    let convertibleDigits = [characters[14], characters[13], characters[12], characters[10], characters[9], characters[7], characters[6]]
     
-      if Character(element).isLetter {
-        guard let digit = Spritz.Transformer.SingleDigitNumber(omocodiaValue: element)?.rawValue else {
-          throw Spritz.ParsingError.corruptedData(
-            "Invalid value for letter \(element). It is not equivalent to any digit. Make sure to insert a valid CF.")
+    // If all array is digits, then no omocodia is present.
+    guard convertibleDigits.contains(where: \.isLetter) else {
+      return omocodia
+    }
+    
+    guard
+      let expectedChecksum = try? DataNormalizer.checksum(for: omocodia.strippedChecksum()),
+      let actualChecksum = characters.last,
+      Character(expectedChecksum) == actualChecksum
+    else {
+      throw Spritz.Error.invalidFiscalCode
+    }
+    
+    try convertibleDigits.enumerated().forEach {
+      if $0.element.isLetter {
+        guard let digit = Spritz.Models.SingleDigitNumber(omocodiaValue: $0.element)?.rawValue else {
+          throw Spritz.Error.invalidFiscalCode
         }
-        guard let indexOfElement = array.lastIndex(of: element) else {
-          fatalError("Something went extremely wrong.")
-        }
-        array[indexOfElement] = String(digit)
+        
+        characters[characters.lastIndex(of: $0.element)!] = Character("\(digit)")
       } else {
-        foundDigit = true
+        guard !convertibleDigits[$0.offset ..< convertibleDigits.endIndex].dropFirst().contains(where: \.isLetter) else {
+          throw Spritz.Error.invalidFiscalCode
+        }
       }
     }
-    return array.reduce(""){ $0 + $1 }
+    
+    let firstFifteenLetters = characters
+      .dropLast()
+      .reduce(""){
+        $0 + String($1)
+      }
+    
+    let checksum = try DataNormalizer.checksum(for: firstFifteenLetters)
+    
+    return firstFifteenLetters.appending(checksum)
   }
 }
